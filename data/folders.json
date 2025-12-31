@@ -1,0 +1,39 @@
+[
+  {
+    "id": "inbox",
+    "name": "Inbox",
+    "icon": "📥",
+    "unreadCount": 0
+  },
+  {
+    "id": "sent",
+    "name": "Sent Items",
+    "icon": "📤",
+    "unreadCount": 0
+  },
+  {
+    "id": "drafts",
+    "name": "Drafts",
+    "icon": "📝",
+    "unreadCount": 0
+  },
+  {
+    "id": "archive",
+    "name": "Archive",
+    "icon": "📦",
+    "unreadCount": 0
+  },
+  {
+    "id": "junk",
+    "name": "Junk Email",
+    "icon": "🗑️",
+    "unreadCount": 0
+  },
+  {
+    "id": "deleted",
+    "name": "Deleted Items",
+    "icon": "🗑️",
+    "unreadCount": 0
+  }
+]
+

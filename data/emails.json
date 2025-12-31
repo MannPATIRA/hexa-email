@@ -1,0 +1,168 @@
+[
+  {
+    "id": "1",
+    "subject": "Welcome to ProcureFlow Demo",
+    "from": "admin@procureflow.com",
+    "to": "user@example.com",
+    "date": "2024-01-15T10:30:00Z",
+    "body": "Welcome to ProcureFlow Demo! This is a sample email to get you started. You can explore all the features of this Outlook-style email interface.",
+    "read": false,
+    "folder": "inbox",
+    "attachments": []
+  },
+  {
+    "id": "2",
+    "subject": "Quarterly Review Meeting",
+    "from": "sarah.johnson@company.com",
+    "to": "user@example.com",
+    "date": "2024-01-14T14:20:00Z",
+    "body": "Hi,\n\nI'd like to schedule our quarterly review meeting. Please let me know your availability for next week.\n\nBest regards,\nSarah",
+    "read": false,
+    "folder": "inbox",
+    "attachments": []
+  },
+  {
+    "id": "3",
+    "subject": "Project Update - Q1 2024",
+    "from": "mike.chen@company.com",
+    "to": "user@example.com",
+    "date": "2024-01-13T09:15:00Z",
+    "body": "Here's the latest update on our Q1 2024 project:\n\n- Milestone 1: Completed\n- Milestone 2: In progress (80% done)\n- Milestone 3: Scheduled for next week\n\nLet me know if you have any questions.",
+    "read": true,
+    "folder": "inbox",
+    "attachments": ["project-update.pdf"]
+  },
+  {
+    "id": "4",
+    "subject": "Team Lunch This Friday",
+    "from": "emily.rodriguez@company.com",
+    "to": "user@example.com",
+    "date": "2024-01-12T16:45:00Z",
+    "body": "Hey everyone!\n\nLet's do a team lunch this Friday at the new Italian place downtown. Who's in?",
+    "read": true,
+    "folder": "inbox",
+    "attachments": []
+  },
+  {
+    "id": "5",
+    "subject": "Invoice #INV-2024-001",
+    "from": "billing@vendor.com",
+    "to": "user@example.com",
+    "date": "2024-01-11T11:00:00Z",
+    "body": "Please find attached invoice #INV-2024-001 for your review. Payment is due within 30 days.\n\nThank you for your business!",
+    "read": false,
+    "folder": "inbox",
+    "attachments": ["invoice-2024-001.pdf"]
+  },
+  {
+    "id": "6",
+    "subject": "Re: Project Update - Q1 2024",
+    "from": "user@example.com",
+    "to": "mike.chen@company.com",
+    "date": "2024-01-13T10:30:00Z",
+    "body": "Thanks for the update, Mike! Everything looks good. Let's touch base on Milestone 3 next week.",
+    "read": true,
+    "folder": "sent",
+    "attachments": []
+  },
+  {
+    "id": "7",
+    "subject": "New Feature Request",
+    "from": "product@company.com",
+    "to": "user@example.com",
+    "date": "2024-01-10T13:20:00Z",
+    "body": "We're collecting feature requests for the next release. What would you like to see?",
+    "read": true,
+    "folder": "inbox",
+    "attachments": []
+  },
+  {
+    "id": "8",
+    "subject": "Security Alert - New Login",
+    "from": "security@company.com",
+    "to": "user@example.com",
+    "date": "2024-01-09T08:15:00Z",
+    "body": "We detected a new login to your account from a new device. If this wasn't you, please contact support immediately.",
+    "read": false,
+    "folder": "inbox",
+    "attachments": []
+  },
+  {
+    "id": "9",
+    "subject": "Weekly Newsletter",
+    "from": "newsletter@company.com",
+    "to": "user@example.com",
+    "date": "2024-01-08T07:00:00Z",
+    "body": "This week's highlights:\n- New product launch\n- Team achievements\n- Upcoming events\n\nRead more on our website.",
+    "read": true,
+    "folder": "inbox",
+    "attachments": []
+  },
+  {
+    "id": "10",
+    "subject": "Meeting Notes - Strategy Session",
+    "from": "james.wilson@company.com",
+    "to": "user@example.com",
+    "date": "2024-01-07T15:30:00Z",
+    "body": "Attached are the meeting notes from yesterday's strategy session. Key points:\n1. Market expansion\n2. Product roadmap\n3. Budget allocation",
+    "read": true,
+    "folder": "inbox",
+    "attachments": ["meeting-notes.pdf", "strategy-deck.pptx"]
+  },
+  {
+    "id": "11",
+    "subject": "Draft: Proposal for Client",
+    "from": "user@example.com",
+    "to": "client@example.com",
+    "date": "2024-01-06T12:00:00Z",
+    "body": "Dear Client,\n\nI'm writing to propose...",
+    "read": true,
+    "folder": "drafts",
+    "attachments": []
+  },
+  {
+    "id": "12",
+    "subject": "Re: Team Lunch This Friday",
+    "from": "user@example.com",
+    "to": "emily.rodriguez@company.com",
+    "date": "2024-01-12T17:00:00Z",
+    "body": "Count me in! Looking forward to it.",
+    "read": true,
+    "folder": "sent",
+    "attachments": []
+  },
+  {
+    "id": "13",
+    "subject": "System Maintenance Scheduled",
+    "from": "it@company.com",
+    "to": "user@example.com",
+    "date": "2024-01-05T10:00:00Z",
+    "body": "We'll be performing system maintenance this weekend. The system will be unavailable from Saturday 2 AM to Sunday 6 AM.",
+    "read": true,
+    "folder": "inbox",
+    "attachments": []
+  },
+  {
+    "id": "14",
+    "subject": "Congratulations on Your Achievement!",
+    "from": "hr@company.com",
+    "to": "user@example.com",
+    "date": "2024-01-04T14:00:00Z",
+    "body": "Congratulations on completing your certification! We're proud of your achievement.",
+    "read": true,
+    "folder": "inbox",
+    "attachments": []
+  },
+  {
+    "id": "15",
+    "subject": "Budget Approval Required",
+    "from": "finance@company.com",
+    "to": "user@example.com",
+    "date": "2024-01-03T09:30:00Z",
+    "body": "Your budget request for Q1 has been submitted. Please review and approve at your earliest convenience.",
+    "read": false,
+    "folder": "inbox",
+    "attachments": ["budget-request.xlsx"]
+  }
+]
+
