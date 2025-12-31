@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Button from './Button'
 import { useDemoState } from '../lib/demoState'
+import suppliersData from '../data/suppliers.json'
 
-export default function POGenerator({ rfqId, selectedEmail, selectedSupplier, onApprove, onClose }) {
+export default function POGenerator({ rfqId, selectedEmail, selectedSupplier, emails = [], onApprove, onClose }) {
   const [isApproving, setIsApproving] = useState(false)
   const [isApproved, setIsApproved] = useState(false)
   const [isGenerating, setIsGenerating] = useState(true)
@@ -28,6 +29,70 @@ export default function POGenerator({ rfqId, selectedEmail, selectedSupplier, on
     }
   }, [isGenerating, demoState])
 
+  // Extract supplier info (must be before any early returns for hooks rules)
+  const supplier = selectedSupplier 
+    ? (typeof selectedSupplier === 'string' 
+        ? { id: selectedSupplier, name: selectedSupplier }
+        : selectedSupplier)
+    : null
+
+  // Get full supplier details from suppliers data
+  const fullSupplier = useMemo(() => {
+    if (!supplier) return null
+    if (supplier.id) {
+      return suppliersData.find(s => s.id === supplier.id) || supplier
+    }
+    return supplier
+  }, [supplier])
+
+  // Find quote email for this supplier and RFQ
+  const quoteEmail = useMemo(() => {
+    if (!rfqId || !fullSupplier || !emails.length) return null
+    
+    const supplierEmail = fullSupplier.email || supplier?.email
+    if (!supplierEmail) return null
+    
+    return emails.find(email => 
+      email.rfqId === rfqId &&
+      email.isQuote === true &&
+      (email.from === supplierEmail || email.to === supplierEmail)
+    )
+  }, [rfqId, fullSupplier, emails, supplier])
+
+  // Extract quote data
+  const quoteData = useMemo(() => {
+    if (!quoteEmail || !quoteEmail.quoteData) return null
+    return quoteEmail.quoteData
+  }, [quoteEmail])
+
+  // Extract RFQ details from email
+  const partNameMatch = selectedEmail?.subject?.match(/- (.+?) -/) || 
+                       selectedEmail?.body?.match(/\*\*Part Name:\*\* (.+?)\n/)
+  const partName = partNameMatch ? partNameMatch[1] : 'Part'
+  
+  const quantityMatch = selectedEmail?.body?.match(/Initial Quantity: (\d+)/)
+  const quantity = quantityMatch ? parseInt(quantityMatch[1]) : 150
+
+  // Calculate pricing totals
+  const pricing = useMemo(() => {
+    if (!quoteData) return null
+    
+    const unitPrice = quoteData.unitPrice || 0
+    const tooling = quoteData.tooling || 0
+    const lineTotal = unitPrice * quantity
+    const total = lineTotal + tooling
+    
+    return {
+      unitPrice,
+      tooling,
+      lineTotal,
+      total,
+      leadTime: quoteData.leadTime || 'Unknown',
+      terms: quoteData.terms || 'Net 30'
+    }
+  }, [quoteData, quantity])
+
+  // Early return checks after all hooks
   if (!rfqId || !selectedSupplier) {
     return null
   }
@@ -59,19 +124,6 @@ export default function POGenerator({ rfqId, selectedEmail, selectedSupplier, on
     )
   }
 
-  // Extract supplier info
-  const supplier = typeof selectedSupplier === 'string' 
-    ? { id: selectedSupplier, name: selectedSupplier }
-    : selectedSupplier
-
-  // Extract RFQ details from email
-  const partNameMatch = selectedEmail?.subject?.match(/- (.+?) -/) || 
-                       selectedEmail?.body?.match(/\*\*Part Name:\*\* (.+?)\n/)
-  const partName = partNameMatch ? partNameMatch[1] : 'Part'
-  
-  const quantityMatch = selectedEmail?.body?.match(/Initial Quantity: (\d+)/)
-  const quantity = quantityMatch ? parseInt(quantityMatch[1]) : 150
-
   const handleApprove = async () => {
     setIsApproving(true)
     // Simulate approval delay
@@ -86,6 +138,11 @@ export default function POGenerator({ rfqId, selectedEmail, selectedSupplier, on
         supplierName: supplier.name,
         partName,
         quantity,
+        totalAmount: pricing?.total || null,
+        unitPrice: pricing?.unitPrice || null,
+        tooling: pricing?.tooling || null,
+        leadTime: pricing?.leadTime || null,
+        terms: pricing?.terms || null,
         date: new Date().toISOString()
       })
     }
@@ -198,11 +255,11 @@ export default function POGenerator({ rfqId, selectedEmail, selectedSupplier, on
                 <ul className="space-y-2 text-sm text-gray-700">
                   <li className="flex items-start">
                     <span className="mr-2">•</span>
-                    <span>Payment terms: Net 30</span>
+                    <span>Payment terms: {pricing?.terms || 'Net 30'}</span>
                   </li>
                   <li className="flex items-start">
                     <span className="mr-2">•</span>
-                    <span>Delivery: Per RFQ requirements</span>
+                    <span>Delivery: {pricing?.leadTime || 'Per RFQ requirements'}</span>
                   </li>
                   <li className="flex items-start">
                     <span className="mr-2">•</span>
@@ -220,30 +277,80 @@ export default function POGenerator({ rfqId, selectedEmail, selectedSupplier, on
             <div>
               <h3 className="text-lg font-semibold text-gray-900 mb-4">PO Preview</h3>
               <div className="border-2 border-gray-300 rounded-lg p-6 bg-gray-50 font-mono text-sm">
-                <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span>PO Number:</span>
-                    <span className="font-semibold">PO-{rfqId.replace('RFQ-', '')}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Supplier:</span>
-                    <span>{supplier.name}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Part:</span>
-                    <span>{partName}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Quantity:</span>
-                    <span>{quantity} units</span>
-                  </div>
-                  <div className="border-t border-gray-400 pt-2 mt-2">
-                    <div className="flex justify-between font-semibold">
-                      <span>Total:</span>
-                      <span>Per quote</span>
+                {pricing ? (
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span>PO Number:</span>
+                      <span className="font-semibold">PO-{rfqId.replace('RFQ-', '')}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Supplier:</span>
+                      <span>{supplier.name}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Part:</span>
+                      <span>{partName}</span>
+                    </div>
+                    <div className="border-t border-gray-400 pt-3 mt-3 space-y-2">
+                      <div className="flex justify-between">
+                        <span>Unit Price:</span>
+                        <span>${pricing.unitPrice.toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Quantity:</span>
+                        <span>{quantity} units</span>
+                      </div>
+                      <div className="flex justify-between border-t border-gray-400 pt-2">
+                        <span>Line Total:</span>
+                        <span className="font-semibold">${pricing.lineTotal.toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Tooling Cost:</span>
+                        <span>${pricing.tooling.toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between border-t-2 border-gray-600 pt-2 mt-2">
+                        <span className="font-semibold">Total Amount:</span>
+                        <span className="font-bold text-lg">${pricing.total.toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between text-xs text-gray-600 mt-3 pt-2 border-t border-gray-300">
+                        <span>Lead Time:</span>
+                        <span>{pricing.leadTime}</span>
+                      </div>
+                      <div className="flex justify-between text-xs text-gray-600">
+                        <span>Payment Terms:</span>
+                        <span>{pricing.terms}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span>PO Number:</span>
+                      <span className="font-semibold">PO-{rfqId.replace('RFQ-', '')}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Supplier:</span>
+                      <span>{supplier.name}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Part:</span>
+                      <span>{partName}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Quantity:</span>
+                      <span>{quantity} units</span>
+                    </div>
+                    <div className="border-t border-gray-400 pt-2 mt-2">
+                      <div className="flex justify-between font-semibold">
+                        <span>Total:</span>
+                        <span className="text-gray-500 italic">Quote data unavailable</span>
+                      </div>
+                    </div>
+                    <div className="mt-3 pt-2 border-t border-gray-300 text-xs text-gray-500">
+                      <p>Quote information not found. Please ensure the supplier has submitted a quote for this RFQ.</p>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -258,7 +365,7 @@ export default function POGenerator({ rfqId, selectedEmail, selectedSupplier, on
             onClick={handleApprove}
             disabled={isApproving}
           >
-            {isApproving ? 'Sending...' : '✓ Approve & Send PO'}
+            {isApproving ? 'Sending...' : 'Approve & Send PO'}
           </Button>
         </div>
       </motion.div>

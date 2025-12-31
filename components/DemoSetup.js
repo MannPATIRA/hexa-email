@@ -28,7 +28,7 @@ export default function DemoSetup({ onSelectScenario, onEnterAsEngineer }) {
       >
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="text-6xl mb-4">🏭</div>
+          <div className="text-6xl mb-4"></div>
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
             ProcureFlow Demo
           </h1>

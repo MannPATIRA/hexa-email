@@ -186,7 +186,7 @@ export default function QuoteComparison({ rfqId, emails, onClose, onSelectSuppli
                               animate={{ scale: 1 }}
                               className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800 mt-1"
                             >
-                              ⭐ LOWEST
+                              LOWEST
                             </motion.span>
                           )}
                         </div>
@@ -213,20 +213,19 @@ export default function QuoteComparison({ rfqId, emails, onClose, onSelectSuppli
                           <div className="flex items-center space-x-1">
                             {quote.isAtRisk ? (
                               <>
-                                <span className="text-amber-600">⚠️</span>
                                 <span className="text-xs text-amber-600">At risk</span>
                               </>
                             ) : quote.leadTimeWeeks < 8 ? (
                               <>
                                 {isFastest && (
                                   <span className="inline-flex items-center px-1.5 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
-                                    🚀 FASTEST
+                                    FASTEST
                                   </span>
                                 )}
-                                <span className="text-xs text-green-600">✓ Early</span>
+                                <span className="text-xs text-green-600">Early</span>
                               </>
                             ) : (
-                              <span className="text-xs text-green-600">✓ On time</span>
+                              <span className="text-xs text-green-600">On time</span>
                             )}
                           </div>
                         </div>
@@ -254,7 +253,7 @@ export default function QuoteComparison({ rfqId, emails, onClose, onSelectSuppli
                       </>
                     ) : (
                       <div className="text-center py-8 text-gray-400">
-                        <div className="text-4xl mb-2">⏳</div>
+                        <div className="text-4xl mb-2"></div>
                         <div className="text-sm">No quote received</div>
                       </div>
                     )}
@@ -271,13 +270,6 @@ export default function QuoteComparison({ rfqId, emails, onClose, onSelectSuppli
                 className="bg-blue-50 border border-blue-200 rounded-lg p-5 mb-6"
               >
                 <div className="flex items-start space-x-3 mb-3">
-                  <motion.span
-                    animate={{ scale: [1, 1.1, 1] }}
-                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-                    className="text-2xl"
-                  >
-                    🤖
-                  </motion.span>
                   <div className="flex-1">
                     <h4 className="font-semibold text-gray-900 mb-2">Agent Recommendation</h4>
                     <p className="text-sm text-gray-700 mb-3">

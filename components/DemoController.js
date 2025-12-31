@@ -147,7 +147,7 @@ export default function DemoController() {
                     onClick={skipToNextEvent}
                     className="w-full text-xs"
                   >
-                    ⏭️ Skip to Next Event
+                    Skip to Next Event
                   </Button>
                 </div>
               )}

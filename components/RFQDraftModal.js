@@ -148,7 +148,7 @@ export default function RFQDraftModal({ draftRFQ, suppliers: selectedSuppliers, 
                             Remove
                           </button>
                         ) : (
-                          <span className="text-sm text-blue-600">✓ Selected</span>
+                          <span className="text-sm text-blue-600">Selected</span>
                         )}
                       </div>
                     )
@@ -236,7 +236,7 @@ export default function RFQDraftModal({ draftRFQ, suppliers: selectedSuppliers, 
             }}
             disabled={isApproving}
           >
-            {isApproving ? 'Sending...' : isEditing ? 'Save & Send to All Suppliers' : '✓ Approve & Send to All Suppliers'}
+            {isApproving ? 'Sending...' : isEditing ? 'Save & Send to All Suppliers' : 'Approve & Send to All Suppliers'}
           </Button>
         </div>
       </motion.div>

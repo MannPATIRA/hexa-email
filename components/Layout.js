@@ -621,6 +621,7 @@ export default function Layout({ children, emails: propEmails }) {
           rfqId={selectedEmail.rfqId}
           selectedEmail={selectedEmail}
           selectedSupplier={demoState.selectedSupplier}
+          emails={emails}
           onApprove={(poData) => {
             if (demoState) {
               // Find supplier details from suppliers list
@@ -645,7 +646,9 @@ Please find attached the Purchase Order for the following:
 **PO Number:** PO-${selectedEmail.rfqId.replace('RFQ-', '')}
 **Part:** ${selectedEmail.partName || extractPartNameFromEmail(selectedEmail) || 'Part'}
 **Quantity:** ${poData.quantity || 150} units
-**Total Amount:** Per quote
+${poData.totalAmount ? `**Unit Price:** $${(poData.unitPrice || 0).toFixed(2)}\n**Tooling:** $${(poData.tooling || 0).toFixed(2)}\n**Total Amount:** $${poData.totalAmount.toFixed(2)}` : '**Total Amount:** Per quote'}
+${poData.leadTime ? `**Lead Time:** ${poData.leadTime}` : ''}
+${poData.terms ? `**Payment Terms:** ${poData.terms}` : ''}
 
 This PO is issued based on your quote for RFQ-${selectedEmail.rfqId}.
 

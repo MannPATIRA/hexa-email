@@ -16,7 +16,7 @@ export default function SimulateRepliesButton({ onSimulate, visible }) {
         onClick={onSimulate}
         className="shadow-lg px-6 py-3 text-base font-semibold"
       >
-        ⚡ Simulate Replies
+        Simulate Replies
       </Button>
     </motion.div>
   )

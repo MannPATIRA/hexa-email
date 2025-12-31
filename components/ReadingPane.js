@@ -101,27 +101,31 @@ export default function ReadingPane({ email, onDelete, onArchive, onMarkRead, em
       )}
       
       <div className="p-6 border-b border-gray-200">
-        <div className="flex items-start justify-between mb-4">
-          <h1 className="text-2xl font-semibold text-gray-900">{displayEmail.subject}</h1>
-          <div className="flex space-x-2">
-            {canSendToAgent && (
-              <Button
-                variant="primary"
-                onClick={() => {
-                  if (onSendToAgent) {
-                    onSendToAgent(email)
-                  }
-                }}
-                className="text-sm font-semibold px-4 py-2"
-              >
-                🤖 Send to Agent
-              </Button>
-            )}
+        <div className="mb-4">
+          <div className="flex items-start justify-between gap-4 mb-3">
+            <h1 className="text-2xl font-semibold text-gray-900 flex-1 min-w-0 pr-4">{displayEmail.subject}</h1>
+            <div className="flex items-center gap-2 flex-shrink-0">
+              {canSendToAgent && (
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    if (onSendToAgent) {
+                      onSendToAgent(email)
+                    }
+                  }}
+                  className="px-6 py-2.5 font-semibold text-base shadow-sm hover:shadow-md transition-shadow"
+                >
+                  Hexa
+                </Button>
+              )}
+            </div>
+          </div>
+          <div className="flex items-center gap-2 flex-wrap">
             {onMarkRead && (
               <Button
                 variant="ghost"
                 onClick={() => onMarkRead(displayEmail.id)}
-                className="text-sm"
+                className="text-sm px-3 py-1.5"
               >
                 {displayEmail.read ? 'Mark Unread' : 'Mark Read'}
               </Button>
@@ -130,7 +134,7 @@ export default function ReadingPane({ email, onDelete, onArchive, onMarkRead, em
               <Button
                 variant="ghost"
                 onClick={() => onArchive(displayEmail.id)}
-                className="text-sm"
+                className="text-sm px-3 py-1.5"
               >
                 Archive
               </Button>
@@ -139,7 +143,7 @@ export default function ReadingPane({ email, onDelete, onArchive, onMarkRead, em
               <Button
                 variant="ghost"
                 onClick={() => onDelete(displayEmail.id)}
-                className="text-sm text-red-600 hover:text-red-700"
+                className="text-sm px-3 py-1.5 text-red-600 hover:text-red-700 hover:bg-red-50"
               >
                 Delete
               </Button>

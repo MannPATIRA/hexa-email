@@ -233,7 +233,6 @@ export default function AgentContextPanel({ email, emails, onCompareQuotes }) {
             className="bg-green-50 border border-green-200 rounded-lg p-4"
           >
             <div className="flex items-center space-x-2 mb-2">
-              <span className="text-xl">✓</span>
               <h4 className="font-semibold text-green-900">Request Received</h4>
             </div>
             <p className="text-sm text-green-800">Processing your RFQ request...</p>

@@ -2,44 +2,44 @@
   {
     "id": "inbox",
     "name": "Inbox",
-    "icon": "📥",
+    "icon": "",
     "unreadCount": 0
   },
   {
     "id": "sent",
     "name": "Sent Items",
-    "icon": "📤",
+    "icon": "",
     "unreadCount": 0
   },
   {
     "id": "drafts",
     "name": "Drafts",
-    "icon": "📝",
+    "icon": "",
     "unreadCount": 0
   },
   {
     "id": "archive",
     "name": "Archive",
-    "icon": "📦",
+    "icon": "",
     "unreadCount": 0
   },
   {
     "id": "agent",
     "name": "Procurement Agent",
-    "icon": "🤖",
+    "icon": "",
     "isExpandable": true,
     "children": []
   },
   {
     "id": "junk",
     "name": "Junk Email",
-    "icon": "🗑️",
+    "icon": "",
     "unreadCount": 0
   },
   {
     "id": "deleted",
     "name": "Deleted Items",
-    "icon": "🗑️",
+    "icon": "",
     "unreadCount": 0
   }
 ]

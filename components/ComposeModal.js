@@ -187,7 +187,6 @@ export default function ComposeModal({ isOpen, onClose, onSend }) {
                 className="w-80 bg-gray-50 overflow-y-auto p-6 scrollbar-custom"
               >
                 <div className="flex items-center space-x-2 mb-4">
-                  <span className="text-2xl">🤖</span>
                   <h3 className="font-semibold text-gray-900">RFQ Assistant</h3>
                 </div>
                 
@@ -216,15 +215,12 @@ export default function ComposeModal({ isOpen, onClose, onSend }) {
                   <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 bg-white">
                     <div className="space-y-2 mb-3">
                       <div className="flex items-center space-x-2 text-sm text-gray-600">
-                        <span>📄</span>
                         <span>2D Drawing (.pdf)</span>
                       </div>
                       <div className="flex items-center space-x-2 text-sm text-gray-600">
-                        <span>📦</span>
                         <span>3D Model (.step, .iges)</span>
                       </div>
                       <div className="flex items-center space-x-2 text-sm text-gray-600">
-                        <span>📋</span>
                         <span>Specifications (.pdf)</span>
                       </div>
                     </div>
@@ -256,10 +252,10 @@ export default function ComposeModal({ isOpen, onClose, onSend }) {
                     key={index}
                     className="flex items-center space-x-2 px-3 py-1.5 bg-white border border-gray-300 rounded-md text-sm"
                   >
-                    <span>
-                      {attachment.type === 'drawing' ? '📄' :
-                       attachment.type === 'cad' ? '📦' :
-                       attachment.type === 'spec' ? '📋' : '📎'}
+                    <span className="text-gray-500">
+                      {attachment.type === 'drawing' ? 'PDF' :
+                       attachment.type === 'cad' ? 'CAD' :
+                       attachment.type === 'spec' ? 'SPEC' : 'FILE'}
                     </span>
                     <span className="text-gray-700">{attachment.name}</span>
                     <button
@@ -283,8 +279,7 @@ export default function ComposeModal({ isOpen, onClose, onSend }) {
             <Button variant="primary" onClick={handleSend}>
               {isRFQMode ? (
                 <>
-                  <span className="mr-2">🤖</span>
-                  Send to Agent →
+                  Hexa →
                 </>
               ) : (
                 'Send'

@@ -86,7 +86,7 @@ export default function SupplierListModal({ onClose }) {
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-gray-600">Average Rating:</span>
                         <span className="font-medium text-gray-900">
-                          {supplier.history.averageRating.toFixed(1)} ⭐
+                          {supplier.history.averageRating.toFixed(1)} stars
                         </span>
                       </div>
                     )}

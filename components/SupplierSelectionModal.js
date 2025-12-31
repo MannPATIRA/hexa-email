@@ -116,7 +116,7 @@ export default function SupplierSelectionModal({ foundSuppliers, onSelect, onClo
                             <div className="flex items-center justify-between">
                               <span className="text-gray-600">Rating:</span>
                               <span className="font-medium text-gray-900">
-                                {supplier.history.averageRating.toFixed(1)} ⭐
+                                {supplier.history.averageRating.toFixed(1)} stars
                               </span>
                             </div>
                           )}
