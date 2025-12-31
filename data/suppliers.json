@@ -1,0 +1,66 @@
+[
+  {
+    "id": "acme-precision",
+    "name": "ACME Precision",
+    "email": "quotes@acmeprecision.com",
+    "history": {
+      "totalOrders": 12,
+      "onTimeRate": 0.98,
+      "averageRating": 4.7,
+      "lastOrderDate": "2023-11-15"
+    },
+    "capabilities": [
+      "First Article Inspection included",
+      "ITAR compliant",
+      "In-house leak testing"
+    ]
+  },
+  {
+    "id": "midwest-mfg",
+    "name": "Midwest Manufacturing",
+    "email": "quotes@midwestmfg.com",
+    "history": {
+      "totalOrders": 5,
+      "onTimeRate": 1.0,
+      "averageRating": 4.9,
+      "lastOrderDate": "2023-12-20"
+    },
+    "capabilities": [
+      "Fast turnaround",
+      "Volume discounts",
+      "Flexible payment terms"
+    ]
+  },
+  {
+    "id": "protech-cnc",
+    "name": "ProTech CNC",
+    "email": "quotes@protechcnc.com",
+    "history": {
+      "totalOrders": 0,
+      "onTimeRate": null,
+      "averageRating": null,
+      "lastOrderDate": null
+    },
+    "capabilities": [
+      "Competitive pricing",
+      "ISO 9001:2015 certified",
+      "In-house anodizing"
+    ]
+  },
+  {
+    "id": "allied-parts",
+    "name": "Allied Parts",
+    "email": "quotes@alliedparts.com",
+    "history": {
+      "totalOrders": 8,
+      "onTimeRate": 0.95,
+      "averageRating": 4.5,
+      "lastOrderDate": "2023-10-08"
+    },
+    "capabilities": [
+      "Large capacity",
+      "Multi-material expertise"
+    ]
+  }
+]
+

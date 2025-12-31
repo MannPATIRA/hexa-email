@@ -5,7 +5,8 @@ export default function Home() {
   const router = useRouter()
 
   useEffect(() => {
-    router.push('/inbox')
+    // Always redirect to flow page for the demo
+    router.push('/flow')
   }, [router])
 
   return null

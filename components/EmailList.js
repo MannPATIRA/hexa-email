@@ -13,7 +13,7 @@ export default function EmailList({ emails, selectedEmailId, onEmailSelect }) {
   }
 
   return (
-    <div className="h-full overflow-y-auto">
+    <div className="h-full overflow-y-auto scrollbar-custom">
       {emails.map((email) => (
         <EmailItem
           key={email.id}

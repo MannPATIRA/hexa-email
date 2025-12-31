@@ -24,6 +24,13 @@
     "unreadCount": 0
   },
   {
+    "id": "agent",
+    "name": "Procurement Agent",
+    "icon": "🤖",
+    "isExpandable": true,
+    "children": []
+  },
+  {
     "id": "junk",
     "name": "Junk Email",
     "icon": "🗑️",
@@ -36,4 +43,3 @@
     "unreadCount": 0
   }
 ]
-

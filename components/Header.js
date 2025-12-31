@@ -2,7 +2,7 @@ import SearchBar from './SearchBar'
 
 export default function Header({ onSearch }) {
   return (
-    <div className="h-16 bg-white border-b border-gray-200 flex items-center px-6">
+    <div className="h-16 bg-white border-b border-gray-200 flex items-center px-6 shadow-sm">
       <div className="flex items-center space-x-4 flex-1">
         <h1 className="text-xl font-semibold text-gray-900">Mail</h1>
         <SearchBar onSearch={onSearch} />
