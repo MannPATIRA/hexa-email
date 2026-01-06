@@ -2,19 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-/* Outlook-inspired custom styles */
+/* Outlook exact styling */
 @layer base {
   * {
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-outlook-blue focus-visible:ring-offset-1;
   }
 
   body {
     @apply antialiased;
-    font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', sans-serif;
     font-size: 14px;
-    background-color: #F3F4F6;
+    background-color: #F3F2F1;
+    color: #323130;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -81,27 +80,30 @@
     display: none;
   }
 
-  /* Custom scrollbar */
+  /* Custom scrollbar - Outlook style */
   .scrollbar-custom::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 12px;
+    height: 12px;
   }
 
   .scrollbar-custom::-webkit-scrollbar-track {
-    @apply bg-gray-100;
+    background-color: #F3F2F1;
   }
 
   .scrollbar-custom::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 rounded-full;
+    background-color: #C8C6C4;
+    border-radius: 6px;
+    border: 2px solid #F3F2F1;
   }
 
   .scrollbar-custom::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-400;
+    background-color: #A19F9D;
   }
 
-  /* Text selection */
+  /* Text selection - Outlook style */
   ::selection {
-    @apply bg-blue-200 text-blue-900;
+    background-color: #C8E6F5;
+    color: #0078D4;
   }
 
   /* Smooth number transitions */

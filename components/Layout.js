@@ -505,91 +505,109 @@ export default function Layout({ children, emails: propEmails }) {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-gray-100">
-      <Header onSearch={handleSearch} />
-      <div className="flex-1 flex overflow-hidden">
+    <div className="h-screen flex flex-col bg-black text-white font-sans overflow-hidden">
+      <Header 
+        onSearch={handleSearch} 
+        selectedEmail={selectedEmail}
+        onSendToAgent={demoState ? (email) => {
+          const rfqId = email.rfqId || `RFQ-2024-${String(Date.now()).slice(-4)}`
+          const agentEmail = { ...email, isAgentEmail: true, rfqId, folder: 'inbox' }
+          demoState.setProcessingStep('request_received')
+          demoState.submitRfq(agentEmail)
+          setTimeout(() => {
+            demoState.setProcessingStep('parsing')
+            demoState.setRequirementsParsing(true)
+            setTimeout(() => {
+              demoState.setRequirementsParsing(false)
+              demoState.setProcessingStep('requirements_review')
+              demoState.setRequirementsReviewPending(true)
+              setShowRequirementsReview(true)
+            }, 2500)
+          }, 1000)
+        } : undefined}
+      />
+      <div className="flex-1 flex overflow-hidden p-1 gap-1">
+        {/* Far-left Navigation Rail */}
+        <div className="w-12 bg-black flex flex-col items-center py-2 space-y-4 flex-shrink-0">
+          <div className="p-2 bg-outlook-blue rounded-md mb-2">
+            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+          </div>
+          <button className="text-outlook-text-secondary hover:text-white p-2 transition-colors">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+          </button>
+          <button className="text-outlook-text-secondary hover:text-white p-2 transition-colors">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197" /></svg>
+          </button>
+          <button className="text-outlook-text-secondary hover:text-white p-2 transition-colors">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+          </button>
+          <div className="flex-1"></div>
+          <button className="text-outlook-text-secondary hover:text-white p-2 mb-2 transition-colors">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" /></svg>
+          </button>
+        </div>
+
+        {/* Folder Sidebar */}
         <ResizablePane
           defaultWidth={250}
           minWidth={180}
           maxWidth={400}
           storageKey="procureflow-sidebar-width"
         >
-          <Sidebar
-            folders={folders}
-            emails={emails}
-            currentFolder={currentFolder}
-            onFolderSelect={handleFolderSelect}
-          />
-        </ResizablePane>
-        <div className="flex-1 flex overflow-hidden">
-          <ResizablePane
-            defaultWidth={400}
-            minWidth={300}
-            maxWidth={600}
-            storageKey="procureflow-emaillist-width"
-          >
-            <div className="h-full bg-white border-r border-gray-200 flex flex-col">
-              <div className="p-4 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">
-                  {folders.find(f => f.id === currentFolder)?.name || 'Mail'}
-                </h2>
-              </div>
-              <div className="flex-1 overflow-hidden">
-                <EmailList
-                  emails={filteredEmails}
-                  selectedEmailId={selectedEmail?.id}
-                  onEmailSelect={handleEmailSelect}
-                />
-              </div>
-            </div>
-          </ResizablePane>
-          <div className="flex-1 overflow-hidden">
-            <ReadingPane
-              email={selectedEmail}
-              onDelete={handleDelete}
-              onArchive={handleArchive}
-              onMarkRead={handleMarkRead}
+          <div className="h-full bg-outlook-sidebar rounded-t-lg overflow-hidden border-r border-outlook-border">
+            <Sidebar
+              folders={folders}
               emails={emails}
-              onEmailSelect={handleEmailSelect}
-              onCompareQuotes={() => {
-                if (selectedEmail?.rfqId) {
-                  setShowQuoteComparison(true)
-                }
-              }}
-              onClarificationSubmit={(answers) => {
-                // This is handled by ClarificationInterface, but we can add additional logic here if needed
-                console.log('Clarification answers submitted:', answers)
-              }}
-              onSendToAgent={demoState ? (email) => {
-                // Step 1: Request Received
-                const rfqId = email.rfqId || `RFQ-2024-${String(Date.now()).slice(-4)}`
-                const agentEmail = {
-                  ...email,
-                  isAgentEmail: true,
-                  rfqId,
-                  folder: 'inbox'
-                }
-                
-                // Set processing step
-                demoState.setProcessingStep('request_received')
-                demoState.submitRfq(agentEmail)
-                
-                // Step 2: After 1 second, start parsing requirements
-                setTimeout(() => {
-                  demoState.setProcessingStep('parsing')
-                  demoState.setRequirementsParsing(true)
-                  
-                  // Step 3: After 2-3 seconds, show requirements review modal
-                  setTimeout(() => {
-                    demoState.setRequirementsParsing(false)
-                    demoState.setProcessingStep('requirements_review')
-                    demoState.setRequirementsReviewPending(true)
-                    setShowRequirementsReview(true)
-                  }, 2500)
-                }, 1000)
-              } : undefined}
+              currentFolder={currentFolder}
+              onFolderSelect={handleFolderSelect}
             />
           </div>
+        </ResizablePane>
+
+        {/* Message List */}
+        <ResizablePane
+          defaultWidth={380}
+          minWidth={300}
+          maxWidth={600}
+          storageKey="procureflow-emaillist-width"
+        >
+          <div className="h-full bg-outlook-sidebar rounded-t-lg overflow-hidden border-r border-outlook-border flex flex-col">
+            <div className="px-4 py-2 flex items-center space-x-4 border-b border-outlook-border">
+              <button className="text-sm font-semibold text-outlook-blue border-b-2 border-outlook-blue pb-1">Focused</button>
+              <button className="text-sm font-semibold text-outlook-text-secondary hover:text-white pb-1 transition-colors">Other</button>
+              <div className="flex-1"></div>
+              <button className="text-outlook-text-secondary hover:text-white transition-colors">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" /></svg>
+              </button>
+            </div>
+            <div className="flex-1 overflow-hidden">
+              <EmailList
+                emails={filteredEmails}
+                selectedEmailId={selectedEmail?.id}
+                onEmailSelect={handleEmailSelect}
+              />
+            </div>
+          </div>
+        </ResizablePane>
+
+        {/* Reading Pane */}
+        <div className="flex-1 bg-outlook-sidebar rounded-t-lg overflow-hidden flex flex-col min-w-0">
+          <ReadingPane
+            email={selectedEmail}
+            onDelete={handleDelete}
+            onArchive={handleArchive}
+            onMarkRead={handleMarkRead}
+            emails={emails}
+            onEmailSelect={handleEmailSelect}
+            onCompareQuotes={() => {
+              if (selectedEmail?.rfqId) {
+                setShowQuoteComparison(true)
+              }
+            }}
+            onClarificationSubmit={(answers) => {
+              console.log('Clarification answers submitted:', answers)
+            }}
+          />
         </div>
       </div>
       <ComposeModal
@@ -621,7 +639,6 @@ export default function Layout({ children, emails: propEmails }) {
           rfqId={selectedEmail.rfqId}
           selectedEmail={selectedEmail}
           selectedSupplier={demoState.selectedSupplier}
-          emails={emails}
           onApprove={(poData) => {
             if (demoState) {
               // Find supplier details from suppliers list
@@ -646,9 +663,7 @@ Please find attached the Purchase Order for the following:
 **PO Number:** PO-${selectedEmail.rfqId.replace('RFQ-', '')}
 **Part:** ${selectedEmail.partName || extractPartNameFromEmail(selectedEmail) || 'Part'}
 **Quantity:** ${poData.quantity || 150} units
-${poData.totalAmount ? `**Unit Price:** $${(poData.unitPrice || 0).toFixed(2)}\n**Tooling:** $${(poData.tooling || 0).toFixed(2)}\n**Total Amount:** $${poData.totalAmount.toFixed(2)}` : '**Total Amount:** Per quote'}
-${poData.leadTime ? `**Lead Time:** ${poData.leadTime}` : ''}
-${poData.terms ? `**Payment Terms:** ${poData.terms}` : ''}
+**Total Amount:** Per quote
 
 This PO is issued based on your quote for RFQ-${selectedEmail.rfqId}.
 

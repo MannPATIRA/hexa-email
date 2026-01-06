@@ -74,61 +74,61 @@ export default function RequirementsViewer({ email, onClose }) {
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
         onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col"
+        className="bg-outlook-sidebar rounded-lg shadow-2xl border border-outlook-border max-w-3xl w-full max-h-[90vh] overflow-hidden flex flex-col"
       >
-        <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+        <div className="p-6 border-b border-outlook-border flex items-center justify-between bg-black">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Requirements</h2>
-            <p className="text-sm text-gray-500 mt-1">RFQ: {email.rfqId || 'N/A'}</p>
+            <h2 className="text-xl font-semibold text-white">Project Requirements</h2>
+            <p className="text-sm text-outlook-text-secondary mt-1 tracking-tight">Technical specifications and constraints</p>
           </div>
-          <Button variant="ghost" onClick={onClose}>
+          <Button variant="ghost" onClick={onClose} className="text-white opacity-50 hover:opacity-100 transition-opacity">
             ✕
           </Button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6">
-          <div className="space-y-6">
+        <div className="flex-1 overflow-y-auto p-8 bg-outlook-bg scrollbar-custom">
+          <div className="space-y-8">
             {/* Part Information */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Part Information</h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-medium text-gray-500">Part Name</label>
-                  <p className="text-base text-gray-900 mt-1">{requirements.partName || 'N/A'}</p>
+              <h3 className="text-xs font-bold text-outlook-blue uppercase tracking-wider mb-4">Identification</h3>
+              <div className="grid grid-cols-2 gap-6">
+                <div className="bg-outlook-sidebar p-4 rounded-md border border-outlook-border shadow-inner">
+                  <label className="text-[10px] font-semibold text-outlook-text-tertiary uppercase tracking-wider block mb-1">Part Designation</label>
+                  <p className="text-base text-white font-semibold">{requirements.partName || 'N/A'}</p>
                 </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-500">Part Number</label>
-                  <p className="text-base text-gray-900 mt-1">{requirements.partNumber || 'N/A'}</p>
+                <div className="bg-outlook-sidebar p-4 rounded-md border border-outlook-border shadow-inner">
+                  <label className="text-[10px] font-semibold text-outlook-text-tertiary uppercase tracking-wider block mb-1">Serial/Part Number</label>
+                  <p className="text-base text-white">{requirements.partNumber || 'N/A'}</p>
                 </div>
               </div>
             </div>
 
             {/* Quantity & Volume */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Quantity</h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-medium text-gray-500">Initial Quantity</label>
-                  <p className="text-base text-gray-900 mt-1">{requirements.quantity || 'N/A'} units</p>
+              <h3 className="text-xs font-bold text-outlook-blue uppercase tracking-wider mb-4">Volume Parameters</h3>
+              <div className="grid grid-cols-2 gap-6">
+                <div className="bg-outlook-sidebar p-4 rounded-md border border-outlook-border shadow-inner">
+                  <label className="text-[10px] font-semibold text-outlook-text-tertiary uppercase tracking-wider block mb-1">Initial Batch</label>
+                  <p className="text-base text-white font-semibold">{requirements.quantity || 'N/A'} units</p>
                 </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-500">Annual Volume</label>
-                  <p className="text-base text-gray-900 mt-1">{requirements.annualVolume || 'N/A'} units/year</p>
+                <div className="bg-outlook-sidebar p-4 rounded-md border border-outlook-border shadow-inner">
+                  <label className="text-[10px] font-semibold text-outlook-text-tertiary uppercase tracking-wider block mb-1">Annual Forecast</label>
+                  <p className="text-base text-white font-semibold">{requirements.annualVolume || 'N/A'} units/year</p>
                 </div>
               </div>
             </div>
 
             {/* Material & Delivery */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Specifications</h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-medium text-gray-500">Material</label>
-                  <p className="text-base text-gray-900 mt-1">{requirements.material || 'N/A'}</p>
+              <h3 className="text-xs font-bold text-outlook-blue uppercase tracking-wider mb-4">Technical Specs</h3>
+              <div className="grid grid-cols-2 gap-6">
+                <div className="bg-outlook-sidebar p-4 rounded-md border border-outlook-border shadow-inner">
+                  <label className="text-[10px] font-semibold text-outlook-text-tertiary uppercase tracking-wider block mb-1">Material Standard</label>
+                  <p className="text-base text-white">{requirements.material || 'N/A'}</p>
                 </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-500">Delivery Date</label>
-                  <p className="text-base text-gray-900 mt-1">{requirements.deliveryDate || 'N/A'}</p>
+                <div className="bg-outlook-sidebar p-4 rounded-md border border-outlook-border shadow-inner">
+                  <label className="text-[10px] font-semibold text-outlook-text-tertiary uppercase tracking-wider block mb-1">Deadline Date</label>
+                  <p className="text-base text-white">{requirements.deliveryDate || 'N/A'}</p>
                 </div>
               </div>
             </div>
@@ -136,9 +136,9 @@ export default function RequirementsViewer({ email, onClose }) {
             {/* Special Requirements */}
             {requirements.specialRequirements && (
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Special Requirements</h3>
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                  <p className="text-base text-gray-900">{requirements.specialRequirements}</p>
+                <h3 className="text-xs font-bold text-outlook-blue uppercase tracking-wider mb-4">Special Instructions</h3>
+                <div className="bg-yellow-900/10 border border-yellow-500/20 rounded-md p-5">
+                  <p className="text-sm text-outlook-text-secondary leading-relaxed italic">"{requirements.specialRequirements}"</p>
                 </div>
               </div>
             )}
@@ -146,11 +146,13 @@ export default function RequirementsViewer({ email, onClose }) {
             {/* Compliance */}
             {requirements.itarRequired && (
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Compliance</h3>
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <div className="flex items-center space-x-2">
-                    <span className="text-blue-600 font-semibold">ITAR</span>
-                    <span className="text-sm text-gray-700">Domestic suppliers only (US-based manufacturing required)</span>
+                <h3 className="text-xs font-bold text-outlook-blue uppercase tracking-wider mb-4">Regulatory Compliance</h3>
+                <div className="bg-outlook-sidebar border border-outlook-border rounded-md p-5">
+                  <div className="flex items-center space-x-3">
+                    <div className="px-2 py-0.5 bg-outlook-blue/10 border border-outlook-blue/20 rounded">
+                      <span className="text-[10px] font-bold text-outlook-blue">ITAR</span>
+                    </div>
+                    <span className="text-sm text-outlook-text-secondary font-medium">Domestic suppliers only (US-based manufacturing required)</span>
                   </div>
                 </div>
               </div>
@@ -159,19 +161,21 @@ export default function RequirementsViewer({ email, onClose }) {
             {/* Attachments */}
             {email.attachments && email.attachments.length > 0 && (
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Attachments</h3>
+                <h3 className="text-xs font-bold text-outlook-blue uppercase tracking-wider mb-4">Technical Data Package</h3>
                 <div className="space-y-2">
                   {email.attachments.map((attachment, index) => {
                     const name = typeof attachment === 'string' ? attachment : attachment.name
                     const type = typeof attachment === 'object' ? attachment.type : null
                     return (
-                      <div key={index} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                        <div className="flex-1">
-                          <p className="text-sm font-medium text-gray-900">{name}</p>
-                          {type && <p className="text-xs text-gray-500">{type}</p>}
+                      <div key={index} className="flex items-center space-x-4 p-4 bg-outlook-sidebar border border-outlook-border rounded-md hover:border-outlook-blue/50 transition-colors group cursor-pointer">
+                        <div className="w-10 h-10 rounded bg-black/40 flex items-center justify-center flex-shrink-0 group-hover:bg-outlook-blue/10 transition-colors">
+                          <svg className="w-5 h-5 text-outlook-text-tertiary group-hover:text-outlook-blue transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-white truncate">{name}</p>
+                          {type && <p className="text-[10px] text-outlook-text-tertiary font-medium uppercase tracking-wider">{type}</p>}
                         </div>
                       </div>
                     )
@@ -182,9 +186,9 @@ export default function RequirementsViewer({ email, onClose }) {
           </div>
         </div>
 
-        <div className="p-6 border-t border-gray-200 flex justify-end">
-          <Button variant="primary" onClick={onClose}>
-            Close
+        <div className="p-6 border-t border-outlook-border flex justify-end bg-black">
+          <Button variant="primary" onClick={onClose} className="text-sm font-semibold px-10 py-2">
+            Close Viewer
           </Button>
         </div>
       </motion.div>

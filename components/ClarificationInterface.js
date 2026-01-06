@@ -176,7 +176,7 @@ ProcureFlow Agent`,
         initial={{ opacity: 0, scale: 0.9, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-        className="mt-6 p-6 bg-green-50 border border-green-200 rounded-lg"
+        className="mt-6 p-6 bg-green-900/20 border border-green-500/30 rounded-lg"
       >
         <div className="flex items-center space-x-3">
           <motion.div
@@ -184,7 +184,7 @@ ProcureFlow Agent`,
             animate={{ scale: 1 }}
             transition={{ type: 'spring', stiffness: 500, damping: 30, delay: 0.1 }}
           >
-            <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <motion.path
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: 1 }}
@@ -197,8 +197,8 @@ ProcureFlow Agent`,
             </svg>
           </motion.div>
           <div>
-            <p className="font-semibold text-green-900">Responses sent successfully</p>
-            <p className="text-sm text-green-700 mt-1">Your answers have been sent to {supplierName}</p>
+            <p className="font-semibold text-green-400">Responses sent successfully</p>
+            <p className="text-sm text-green-300/80 mt-1">Your answers have been sent to {supplierName}</p>
           </div>
         </div>
       </motion.div>
@@ -210,14 +210,14 @@ ProcureFlow Agent`,
       data-clarification-interface
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mt-6 border-t border-gray-200 pt-6"
+      className="mt-6 border-t border-outlook-border pt-6"
     >
       {/* Header */}
-      <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6">
+      <div className="bg-yellow-900/20 border border-yellow-500/30 rounded-lg p-4 mb-6">
         <div className="flex items-center space-x-2 mb-1">
-          <h3 className="font-semibold text-gray-900">Agent needs your input to continue</h3>
+          <h3 className="font-semibold text-yellow-400">Agent needs your input to continue</h3>
         </div>
-        <p className="text-sm text-gray-700">
+        <p className="text-sm text-yellow-300/80">
           {questionCount} {questionCount === 1 ? 'question' : 'questions'} from {supplierName}
         </p>
       </div>
@@ -234,110 +234,84 @@ ProcureFlow Agent`,
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.2, delay: index * 0.1 }}
-              className="border border-gray-200 rounded-lg p-5 bg-white card-hover"
+              className="border border-outlook-border rounded p-5 bg-outlook-bg"
             >
               <div className="mb-4">
-                <p className="font-semibold text-gray-900 mb-2">
+                <p className="font-semibold text-white mb-2">
                   Q{index + 1}: {question.question}
                 </p>
                 {question.agentReasoning && (
-                  <div className="bg-blue-50 border border-blue-200 rounded-md p-3 mt-3">
-                    <div className="flex items-start space-x-2">
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-blue-900 mb-1">Agent suggestion:</p>
-                        {hasSuggestion ? (
-                          <p className="text-sm text-blue-800">{question.agentSuggestion}</p>
-                        ) : (
-                          <p className="text-sm text-blue-800">{question.agentReasoning}</p>
-                        )}
-                        {hasSuggestion && question.agentReasoning && (
-                          <p className="text-xs text-blue-600 mt-2 italic">{question.agentReasoning}</p>
-                        )}
-                        {question.confidence && (
-                          <p className="text-xs text-blue-500 mt-1">
-                            Confidence: {question.confidence === 'high' ? 'High' : question.confidence === 'needs-human' ? 'Requires human decision' : 'Medium'}
-                          </p>
-                        )}
-                      </div>
+                  <div className="bg-outlook-blue/5 border border-outlook-blue/20 rounded p-3 mt-3">
+                    <div className="flex-1">
+                      <p className="text-[10px] font-bold text-outlook-blue uppercase tracking-wider mb-1">Agent recommendation:</p>
+                      {hasSuggestion ? (
+                        <p className="text-sm text-white/90">{question.agentSuggestion}</p>
+                      ) : (
+                        <p className="text-sm text-white/90">{question.agentReasoning}</p>
+                      )}
+                      {hasSuggestion && question.agentReasoning && (
+                        <p className="text-[11px] text-outlook-text-secondary mt-2 italic font-medium">"{question.agentReasoning}"</p>
+                      )}
+                      {question.confidence && (
+                        <p className="text-[10px] font-bold text-outlook-blue/70 mt-2 uppercase tracking-tight">
+                          Confidence Score: {question.confidence === 'high' ? 'High' : question.confidence === 'needs-human' ? 'Action Required' : 'Medium'}
+                        </p>
+                      )}
                     </div>
                   </div>
                 )}
               </div>
 
               {/* Answer Options */}
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {hasSuggestion && (
                   <label className="flex items-start space-x-3 cursor-pointer group">
-                    <div className="relative mt-1">
+                    <div className="mt-1 flex-shrink-0">
                       <input
                         type="radio"
                         name={`question-${question.id}`}
                         checked={answer?.type === 'suggestion'}
                         onChange={() => handleAnswerChange(question.id, 'suggestion')}
                         className="sr-only"
-                        aria-label="Accept suggestion"
                       />
-                      <div className={`w-5 h-5 rounded-full border-2 transition-all ${
-                        answer?.type === 'suggestion'
-                          ? 'border-blue-600 bg-blue-600'
-                          : 'border-gray-300 group-hover:border-blue-400'
+                      <div className={`w-4 h-4 rounded-full border transition-all flex items-center justify-center ${
+                        answer?.type === 'suggestion' ? 'bg-outlook-blue border-outlook-blue' : 'bg-black border-outlook-border'
                       }`}>
-                        {answer?.type === 'suggestion' && (
-                          <motion.div
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            className="w-full h-full rounded-full bg-white flex items-center justify-center"
-                          >
-                            <div className="w-2 h-2 rounded-full bg-blue-600"></div>
-                          </motion.div>
-                        )}
+                        {answer?.type === 'suggestion' && <div className="w-1.5 h-1.5 rounded-full bg-white"></div>}
                       </div>
                     </div>
-                    <div className="flex-1">
-                      <span className="text-sm font-medium text-gray-900">Accept suggestion:</span>
-                      <p className="text-sm text-gray-600 mt-0.5">"{question.agentSuggestion}"</p>
+                    <div className="flex-1 min-w-0">
+                      <span className="text-sm font-semibold text-white">Accept recommendation</span>
+                      <p className="text-sm text-outlook-text-secondary mt-0.5 truncate italic">"{question.agentSuggestion}"</p>
                     </div>
                   </label>
                 )}
 
                 <label className="flex items-start space-x-3 cursor-pointer group">
-                  <div className="relative mt-1">
+                  <div className="mt-1 flex-shrink-0">
                     <input
                       type="radio"
                       name={`question-${question.id}`}
                       checked={answer?.type === 'custom'}
                       onChange={() => handleAnswerChange(question.id, 'custom')}
                       className="sr-only"
-                      aria-label="Custom response"
                     />
-                    <div className={`w-5 h-5 rounded-full border-2 transition-all ${
-                      answer?.type === 'custom'
-                        ? 'border-blue-600 bg-blue-600'
-                        : 'border-gray-300 group-hover:border-blue-400'
+                    <div className={`w-4 h-4 rounded-full border transition-all flex items-center justify-center ${
+                      answer?.type === 'custom' ? 'bg-outlook-blue border-outlook-blue' : 'bg-black border-outlook-border'
                     }`}>
-                      {answer?.type === 'custom' && (
-                        <motion.div
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          className="w-full h-full rounded-full bg-white flex items-center justify-center"
-                        >
-                          <div className="w-2 h-2 rounded-full bg-blue-600"></div>
-                        </motion.div>
-                      )}
+                      {answer?.type === 'custom' && <div className="w-1.5 h-1.5 rounded-full bg-white"></div>}
                     </div>
                   </div>
-                  <div className="flex-1">
-                    <span className="text-sm font-medium text-gray-900">Custom response:</span>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-sm font-semibold text-white">Custom response</span>
                     {answer?.type === 'custom' && (
                       <motion.textarea
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
                         value={answer.value || ''}
                         onChange={(e) => handleAnswerChange(question.id, 'custom', e.target.value)}
-                        placeholder="Type your response..."
-                        className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm transition-all"
-                        rows={3}
+                        placeholder="Specify custom parameters..."
+                        className="w-full mt-3 px-3 py-2 bg-outlook-sidebar border border-outlook-border rounded text-sm text-white outline-none focus:ring-1 focus:ring-outlook-blue transition-all min-h-[80px]"
                       />
                     )}
                   </div>
@@ -349,34 +323,37 @@ ProcureFlow Agent`,
       </div>
 
       {/* Submit Section */}
-      <div className="border-t border-gray-200 pt-6">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <p className="text-sm font-medium text-gray-900">Send responses to</p>
-            <p className="text-sm text-gray-600">{supplierName}</p>
+      <div className="border-t border-outlook-border pt-6 mt-8">
+        <div className="flex items-center justify-between">
+          <div className="min-w-0 flex-1 mr-6">
+            <p className="text-xs font-semibold text-outlook-text-tertiary uppercase tracking-wider">Reciprocal Contact</p>
+            <p className="text-sm font-semibold text-white truncate">{supplierName}</p>
           </div>
-          <div className="flex space-x-3">
+          <div className="flex space-x-3 flex-shrink-0">
             <Button
               variant="secondary"
               onClick={handleForward}
-              className="text-sm"
+              className="text-sm font-semibold"
             >
-              Forward to Sarah Chen for review
+              Forward for Review
             </Button>
             <Button
               variant="primary"
               onClick={handleSubmit}
               disabled={!allQuestionsAnswered || isSubmitting}
-              className="text-sm"
+              className="text-sm font-semibold px-8 py-2.5"
             >
-              {isSubmitting ? 'Sending...' : 'Send Responses to Supplier'}
+              {isSubmitting ? 'Transmitting...' : 'Send to Supplier'}
             </Button>
           </div>
         </div>
         {!allQuestionsAnswered && (
-          <p className="text-xs text-amber-600 mt-2">
-            Please answer all questions before submitting
-          </p>
+          <div className="mt-4 flex items-center space-x-2 text-yellow-500/80">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <p className="text-[11px] font-semibold uppercase tracking-wider">Pending responses required</p>
+          </div>
         )}
       </div>
     </motion.div>

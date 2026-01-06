@@ -1,10 +1,9 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Button from './Button'
 import { useDemoState } from '../lib/demoState'
-import suppliersData from '../data/suppliers.json'
 
-export default function POGenerator({ rfqId, selectedEmail, selectedSupplier, emails = [], onApprove, onClose }) {
+export default function POGenerator({ rfqId, selectedEmail, selectedSupplier, onApprove, onClose }) {
   const [isApproving, setIsApproving] = useState(false)
   const [isApproved, setIsApproved] = useState(false)
   const [isGenerating, setIsGenerating] = useState(true)
@@ -29,70 +28,6 @@ export default function POGenerator({ rfqId, selectedEmail, selectedSupplier, em
     }
   }, [isGenerating, demoState])
 
-  // Extract supplier info (must be before any early returns for hooks rules)
-  const supplier = selectedSupplier 
-    ? (typeof selectedSupplier === 'string' 
-        ? { id: selectedSupplier, name: selectedSupplier }
-        : selectedSupplier)
-    : null
-
-  // Get full supplier details from suppliers data
-  const fullSupplier = useMemo(() => {
-    if (!supplier) return null
-    if (supplier.id) {
-      return suppliersData.find(s => s.id === supplier.id) || supplier
-    }
-    return supplier
-  }, [supplier])
-
-  // Find quote email for this supplier and RFQ
-  const quoteEmail = useMemo(() => {
-    if (!rfqId || !fullSupplier || !emails.length) return null
-    
-    const supplierEmail = fullSupplier.email || supplier?.email
-    if (!supplierEmail) return null
-    
-    return emails.find(email => 
-      email.rfqId === rfqId &&
-      email.isQuote === true &&
-      (email.from === supplierEmail || email.to === supplierEmail)
-    )
-  }, [rfqId, fullSupplier, emails, supplier])
-
-  // Extract quote data
-  const quoteData = useMemo(() => {
-    if (!quoteEmail || !quoteEmail.quoteData) return null
-    return quoteEmail.quoteData
-  }, [quoteEmail])
-
-  // Extract RFQ details from email
-  const partNameMatch = selectedEmail?.subject?.match(/- (.+?) -/) || 
-                       selectedEmail?.body?.match(/\*\*Part Name:\*\* (.+?)\n/)
-  const partName = partNameMatch ? partNameMatch[1] : 'Part'
-  
-  const quantityMatch = selectedEmail?.body?.match(/Initial Quantity: (\d+)/)
-  const quantity = quantityMatch ? parseInt(quantityMatch[1]) : 150
-
-  // Calculate pricing totals
-  const pricing = useMemo(() => {
-    if (!quoteData) return null
-    
-    const unitPrice = quoteData.unitPrice || 0
-    const tooling = quoteData.tooling || 0
-    const lineTotal = unitPrice * quantity
-    const total = lineTotal + tooling
-    
-    return {
-      unitPrice,
-      tooling,
-      lineTotal,
-      total,
-      leadTime: quoteData.leadTime || 'Unknown',
-      terms: quoteData.terms || 'Net 30'
-    }
-  }, [quoteData, quantity])
-
-  // Early return checks after all hooks
   if (!rfqId || !selectedSupplier) {
     return null
   }
@@ -103,26 +38,39 @@ export default function POGenerator({ rfqId, selectedEmail, selectedSupplier, em
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+        className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4 backdrop-blur-sm"
       >
         <motion.div
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="bg-white rounded-lg shadow-xl max-w-md w-full p-8 text-center"
+          className="bg-outlook-sidebar rounded-lg shadow-2xl border border-outlook-border max-w-md w-full p-8 text-center"
         >
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-            className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"
+            className="w-12 h-12 border-4 border-outlook-blue border-t-transparent rounded-full mx-auto mb-6"
           />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Generating Purchase Order...</h2>
-          <p className="text-gray-600">
-            Creating PO for {typeof selectedSupplier === 'object' ? selectedSupplier.name : selectedSupplier}
+          <h2 className="text-xl font-semibold text-white mb-2">Generating Order</h2>
+          <p className="text-sm text-outlook-text-secondary">
+            Compiling purchase order for <span className="text-outlook-blue font-semibold">{typeof selectedSupplier === 'object' ? selectedSupplier.name : selectedSupplier}</span>
           </p>
         </motion.div>
       </motion.div>
     )
   }
+
+  // Extract supplier info
+  const supplier = typeof selectedSupplier === 'string' 
+    ? { id: selectedSupplier, name: selectedSupplier }
+    : selectedSupplier
+
+  // Extract RFQ details from email
+  const partNameMatch = selectedEmail?.subject?.match(/- (.+?) -/) || 
+                       selectedEmail?.body?.match(/\*\*Part Name:\*\* (.+?)\n/)
+  const partName = partNameMatch ? partNameMatch[1] : 'Part'
+  
+  const quantityMatch = selectedEmail?.body?.match(/Initial Quantity: (\d+)/)
+  const quantity = quantityMatch ? parseInt(quantityMatch[1]) : 150
 
   const handleApprove = async () => {
     setIsApproving(true)
@@ -138,11 +86,6 @@ export default function POGenerator({ rfqId, selectedEmail, selectedSupplier, em
         supplierName: supplier.name,
         partName,
         quantity,
-        totalAmount: pricing?.total || null,
-        unitPrice: pricing?.unitPrice || null,
-        tooling: pricing?.tooling || null,
-        leadTime: pricing?.leadTime || null,
-        terms: pricing?.terms || null,
         date: new Date().toISOString()
       })
     }
@@ -153,29 +96,29 @@ export default function POGenerator({ rfqId, selectedEmail, selectedSupplier, em
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+        className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4 backdrop-blur-sm"
       >
         <motion.div
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="bg-white rounded-lg shadow-xl max-w-2xl w-full p-8 text-center"
+          className="bg-outlook-sidebar rounded-lg shadow-2xl border border-outlook-border max-w-2xl w-full p-12 text-center"
         >
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: 'spring', stiffness: 200, damping: 15 }}
-            className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4"
+            className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6"
           >
             <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </motion.div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Purchase Order Sent!</h2>
-          <p className="text-gray-600 mb-6">
-            PO has been sent to {supplier.name} for {partName}
+          <h2 className="text-2xl font-semibold text-white mb-2">Purchase Order Sent</h2>
+          <p className="text-outlook-text-secondary mb-8">
+            PO confirmed and transmitted to <span className="text-white font-semibold">{supplier.name}</span>
           </p>
-          <Button variant="primary" onClick={onClose}>
-            Close
+          <Button variant="primary" onClick={onClose} className="px-10 py-2 text-sm font-semibold">
+            Return to Inbox
           </Button>
         </motion.div>
       </motion.div>
@@ -187,7 +130,7 @@ export default function POGenerator({ rfqId, selectedEmail, selectedSupplier, em
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+      className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4 backdrop-blur-sm"
       onClick={onClose}
     >
       <motion.div
@@ -195,32 +138,32 @@ export default function POGenerator({ rfqId, selectedEmail, selectedSupplier, em
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
         onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col"
+        className="bg-outlook-sidebar rounded-lg shadow-2xl border border-outlook-border max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col"
       >
-        <div className="p-6 border-b border-gray-200 flex items-center justify-between bg-blue-50">
+        <div className="p-6 border-b border-outlook-border flex items-center justify-between bg-black">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Purchase Order Draft</h2>
-            <p className="text-sm text-gray-500 mt-1">RFQ: {rfqId}</p>
+            <h2 className="text-xl font-semibold text-white">Purchase Order</h2>
+            <p className="text-sm text-outlook-text-secondary mt-1">Ref: {rfqId}</p>
           </div>
-          <Button variant="ghost" onClick={onClose}>
+          <Button variant="ghost" onClick={onClose} className="text-white opacity-50 hover:opacity-100 transition-opacity">
             ✕
           </Button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6">
-          <div className="space-y-6">
+        <div className="flex-1 overflow-y-auto p-8 bg-outlook-bg scrollbar-custom">
+          <div className="space-y-8">
             {/* PO Details */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">PO Details</h3>
-              <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-                <div className="grid grid-cols-2 gap-4">
+              <h3 className="text-[11px] font-semibold text-outlook-blue uppercase tracking-wide mb-3">Core Specifications</h3>
+              <div className="bg-outlook-sidebar rounded p-6 border border-outlook-border">
+                <div className="grid grid-cols-2 gap-y-5 gap-x-8">
                   <div>
-                    <label className="text-sm font-medium text-gray-500">PO Number</label>
-                    <p className="text-base text-gray-900 mt-1 font-mono">PO-{rfqId.replace('RFQ-', '')}</p>
+                    <label className="text-[10px] font-medium text-outlook-text-secondary uppercase">Document Number</label>
+                    <p className="text-sm text-white mt-0.5 font-semibold">PO-{rfqId.replace('RFQ-', '')}</p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-500">Date</label>
-                    <p className="text-base text-gray-900 mt-1">
+                    <label className="text-[10px] font-medium text-outlook-text-secondary uppercase">Issue Date</label>
+                    <p className="text-sm text-white mt-0.5 font-medium">
                       {new Date().toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'long',
@@ -229,20 +172,20 @@ export default function POGenerator({ rfqId, selectedEmail, selectedSupplier, em
                     </p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-500">Supplier</label>
-                    <p className="text-base text-gray-900 mt-1">{supplier.name}</p>
+                    <label className="text-[10px] font-medium text-outlook-text-secondary uppercase">Vendor Entity</label>
+                    <p className="text-sm text-white mt-0.5 font-semibold">{supplier.name}</p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-500">Part Name</label>
-                    <p className="text-base text-gray-900 mt-1">{partName}</p>
+                    <label className="text-[10| font-medium text-outlook-text-secondary uppercase">Part Classification</label>
+                    <p className="text-sm text-white mt-0.5 font-medium">{partName}</p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-500">Quantity</label>
-                    <p className="text-base text-gray-900 mt-1">{quantity} units</p>
+                    <label className="text-[10px] font-medium text-outlook-text-secondary uppercase">Procurement Quantity</label>
+                    <p className="text-sm text-white mt-0.5 font-semibold">{quantity} units</p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-500">Status</label>
-                    <p className="text-base text-gray-900 mt-1">Draft</p>
+                    <label className="text-[10px] font-medium text-outlook-text-secondary uppercase">Workflow Status</label>
+                    <p className="text-sm text-amber-400 mt-0.5 font-semibold">Pending Approval</p>
                   </div>
                 </div>
               </div>
@@ -250,24 +193,24 @@ export default function POGenerator({ rfqId, selectedEmail, selectedSupplier, em
 
             {/* Terms & Conditions */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Terms & Conditions</h3>
-              <div className="border border-gray-200 rounded-lg p-4 bg-white">
-                <ul className="space-y-2 text-sm text-gray-700">
-                  <li className="flex items-start">
-                    <span className="mr-2">•</span>
-                    <span>Payment terms: {pricing?.terms || 'Net 30'}</span>
+              <h3 className="text-[11px] font-semibold text-outlook-blue uppercase tracking-wide mb-3">Commercial Terms</h3>
+              <div className="border border-outlook-border rounded p-6 bg-outlook-sidebar">
+                <ul className="space-y-2.5 text-[13px] text-outlook-text-secondary">
+                  <li className="flex items-start space-x-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-outlook-blue mt-1.5 flex-shrink-0"></div>
+                    <span>Net 30 payment schedule from receipt of verified invoice.</span>
                   </li>
-                  <li className="flex items-start">
-                    <span className="mr-2">•</span>
-                    <span>Delivery: {pricing?.leadTime || 'Per RFQ requirements'}</span>
+                  <li className="flex items-start space-x-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-outlook-blue mt-1.5 flex-shrink-0"></div>
+                    <span>FOB Destination delivery per primary RFQ constraints.</span>
                   </li>
-                  <li className="flex items-start">
-                    <span className="mr-2">•</span>
-                    <span>Quality: Per engineering specifications</span>
+                  <li className="flex items-start space-x-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-outlook-blue mt-1.5 flex-shrink-0"></div>
+                    <span>Quality assurance per ISO 9001 and internal engineering specs.</span>
                   </li>
-                  <li className="flex items-start">
-                    <span className="mr-2">•</span>
-                    <span>Warranty: Standard supplier warranty applies</span>
+                  <li className="flex items-start space-x-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-outlook-blue mt-1.5 flex-shrink-0"></div>
+                    <span>Standard manufacturing warranty applies to all delivered units.</span>
                   </li>
                 </ul>
               </div>
@@ -275,97 +218,46 @@ export default function POGenerator({ rfqId, selectedEmail, selectedSupplier, em
 
             {/* PO Preview */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">PO Preview</h3>
-              <div className="border-2 border-gray-300 rounded-lg p-6 bg-gray-50 font-mono text-sm">
-                {pricing ? (
-                  <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span>PO Number:</span>
-                      <span className="font-semibold">PO-{rfqId.replace('RFQ-', '')}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Supplier:</span>
-                      <span>{supplier.name}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Part:</span>
-                      <span>{partName}</span>
-                    </div>
-                    <div className="border-t border-gray-400 pt-3 mt-3 space-y-2">
-                      <div className="flex justify-between">
-                        <span>Unit Price:</span>
-                        <span>${pricing.unitPrice.toFixed(2)}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Quantity:</span>
-                        <span>{quantity} units</span>
-                      </div>
-                      <div className="flex justify-between border-t border-gray-400 pt-2">
-                        <span>Line Total:</span>
-                        <span className="font-semibold">${pricing.lineTotal.toFixed(2)}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Tooling Cost:</span>
-                        <span>${pricing.tooling.toFixed(2)}</span>
-                      </div>
-                      <div className="flex justify-between border-t-2 border-gray-600 pt-2 mt-2">
-                        <span className="font-semibold">Total Amount:</span>
-                        <span className="font-bold text-lg">${pricing.total.toFixed(2)}</span>
-                      </div>
-                      <div className="flex justify-between text-xs text-gray-600 mt-3 pt-2 border-t border-gray-300">
-                        <span>Lead Time:</span>
-                        <span>{pricing.leadTime}</span>
-                      </div>
-                      <div className="flex justify-between text-xs text-gray-600">
-                        <span>Payment Terms:</span>
-                        <span>{pricing.terms}</span>
-                      </div>
-                    </div>
+              <h3 className="text-[11px] font-semibold text-outlook-blue uppercase tracking-wide mb-3">Official Document Preview</h3>
+              <div className="border border-outlook-border rounded p-8 bg-black/20 text-[13px] relative overflow-hidden">
+                <div className="space-y-3 max-w-lg mx-auto">
+                  <div className="flex justify-between border-b border-white/10 pb-2">
+                    <span className="text-outlook-text-secondary font-medium">PO IDENTIFIER:</span>
+                    <span className="font-semibold text-white">PO-{rfqId.replace('RFQ-', '')}</span>
                   </div>
-                ) : (
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span>PO Number:</span>
-                      <span className="font-semibold">PO-{rfqId.replace('RFQ-', '')}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Supplier:</span>
-                      <span>{supplier.name}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Part:</span>
-                      <span>{partName}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Quantity:</span>
-                      <span>{quantity} units</span>
-                    </div>
-                    <div className="border-t border-gray-400 pt-2 mt-2">
-                      <div className="flex justify-between font-semibold">
-                        <span>Total:</span>
-                        <span className="text-gray-500 italic">Quote data unavailable</span>
-                      </div>
-                    </div>
-                    <div className="mt-3 pt-2 border-t border-gray-300 text-xs text-gray-500">
-                      <p>Quote information not found. Please ensure the supplier has submitted a quote for this RFQ.</p>
-                    </div>
+                  <div className="flex justify-between border-b border-white/10 pb-2">
+                    <span className="text-outlook-text-secondary font-medium">VENDOR:</span>
+                    <span className="font-semibold text-white uppercase">{supplier.name}</span>
                   </div>
-                )}
+                  <div className="flex justify-between border-b border-white/10 pb-2">
+                    <span className="text-outlook-text-secondary font-medium">LINE ITEM:</span>
+                    <span className="font-semibold text-white">{partName}</span>
+                  </div>
+                  <div className="flex justify-between border-b border-white/10 pb-2">
+                    <span className="text-outlook-text-secondary font-medium">QTY:</span>
+                    <span className="font-semibold text-white">{quantity} PCS</span>
+                  </div>
+                  <div className="pt-4 flex justify-between items-baseline">
+                    <span className="text-sm font-bold text-white">TOTAL PAYABLE:</span>
+                    <span className="text-base font-bold text-outlook-blue">AS PER QUOTATION</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="p-6 border-t border-gray-200 flex items-center justify-between bg-gray-50">
-          <Button variant="ghost" onClick={onClose}>
-            Cancel
+        <div className="p-6 border-t border-outlook-border flex items-center justify-between bg-black">
+          <Button variant="ghost" onClick={onClose} className="text-[11px] font-semibold text-outlook-text-secondary hover:text-white uppercase tracking-wide">
+            Discard
           </Button>
           <Button
             variant="primary"
             onClick={handleApprove}
             disabled={isApproving}
+            className="text-[11px] font-bold px-10 py-2.5 uppercase tracking-wide"
           >
-            {isApproving ? 'Sending...' : 'Approve & Send PO'}
+            {isApproving ? 'Transmitting...' : 'Authorize & Send PO'}
           </Button>
         </div>
       </motion.div>

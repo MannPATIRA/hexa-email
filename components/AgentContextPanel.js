@@ -193,33 +193,42 @@ export default function AgentContextPanel({ email, emails, onCompareQuotes }) {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
       transition={{ duration: 0.3, ease: 'easeOut' }}
-      className="w-80 glass border-l border-gray-200 h-full overflow-y-auto scrollbar-custom"
+      className="w-80 bg-outlook-sidebar border-l border-outlook-border h-full overflow-y-auto scrollbar-custom"
     >
       <div className="p-6 space-y-6">
+        {/* Header Section */}
+        <div className="flex flex-col">
+          <h2 className="text-xl font-semibold text-white tracking-tight">Procurement Agent</h2>
+          <div className="flex items-center space-x-1.5 mt-1">
+            <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+            <span className="text-[10px] font-semibold text-green-500 uppercase tracking-wide">Active Status</span>
+          </div>
+        </div>
+
         {/* RFQ Summary Card */}
-        <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-gray-900 text-sm">{rfqId}</h3>
+        <div className="bg-outlook-bg rounded p-5 border border-outlook-border">
+          <div className="flex items-center justify-between mb-4 pb-3 border-b border-outlook-border/50">
+            <h3 className="font-semibold text-white text-[13px] tracking-tight">{rfqId}</h3>
             <div className="flex items-center space-x-2">
-              <span className={`w-2 h-2 rounded-full ${statusInfo.dot} animate-pulse`}></span>
-              <span className="text-xs text-gray-600">{statusInfo.label}</span>
+              <span className={`w-1.5 h-1.5 rounded-full ${statusInfo.dot}`}></span>
+              <span className="text-[10px] font-semibold text-outlook-text-secondary uppercase tracking-wide">{statusInfo.label}</span>
             </div>
           </div>
-          <div className="space-y-2 text-sm">
+          <div className="space-y-4 text-sm">
             <div>
-              <p className="text-xs text-gray-500 mb-0.5">Part</p>
-              <p className="text-gray-900 font-medium">{partName}</p>
+              <p className="text-[10px] font-medium text-outlook-text-tertiary uppercase tracking-wide mb-1">Part Designation</p>
+              <p className="text-white font-semibold truncate text-[13px]">{partName}</p>
             </div>
             <div>
-              <p className="text-xs text-gray-500 mb-0.5">Requested by</p>
-              <p className="text-gray-900">{requester}</p>
+              <p className="text-[10px] font-medium text-outlook-text-tertiary uppercase tracking-wide mb-1">Requester</p>
+              <p className="text-white font-medium text-[13px]">{requester}</p>
             </div>
             <div>
-              <p className="text-xs text-gray-500 mb-0.5">Due date</p>
-              <p className="text-gray-900">
-                {dueDateFormatted}
-                <span className="text-gray-500 ml-2">({daysUntil} days)</span>
-              </p>
+              <p className="text-[10px] font-medium text-outlook-text-tertiary uppercase tracking-wide mb-1">Maturity Date</p>
+              <div className="flex items-center space-x-2">
+                <p className="text-white font-medium text-[13px]">{dueDateFormatted}</p>
+                <span className="text-[9px] font-bold text-outlook-blue bg-outlook-blue/10 px-1.5 py-0.5 rounded tracking-tighter">{daysUntil}D LEFT</span>
+              </div>
             </div>
           </div>
         </div>
@@ -230,12 +239,12 @@ export default function AgentContextPanel({ email, emails, onCompareQuotes }) {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="bg-green-50 border border-green-200 rounded-lg p-4"
+            className="bg-green-900/20 border border-green-500/30 rounded p-4"
           >
             <div className="flex items-center space-x-2 mb-2">
-              <h4 className="font-semibold text-green-900">Request Received</h4>
+              <h4 className="text-[13px] font-semibold text-green-400">Request Received</h4>
             </div>
-            <p className="text-sm text-green-800">Processing your RFQ request...</p>
+            <p className="text-xs text-green-300">Processing your RFQ request...</p>
           </motion.div>
         )}
 
@@ -245,23 +254,23 @@ export default function AgentContextPanel({ email, emails, onCompareQuotes }) {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="bg-blue-50 border border-blue-200 rounded-lg p-4"
+            className="bg-outlook-blue/10 border border-outlook-blue/30 rounded p-4"
           >
             <div className="flex items-center space-x-2 mb-2">
-              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-              <h4 className="text-sm font-semibold text-blue-900">Parsing Requirements...</h4>
+              <div className="w-1.5 h-1.5 bg-outlook-blue rounded-full animate-pulse"></div>
+              <h4 className="text-[13px] font-semibold text-outlook-blue">Parsing Requirements...</h4>
             </div>
-            <div className="space-y-2 text-xs text-blue-800">
+            <div className="space-y-2 text-[11px] text-outlook-text-secondary">
               <div className="flex items-center space-x-2">
-                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                <div className="w-1 h-1 bg-outlook-blue rounded-full opacity-50"></div>
                 <span>Extracting part details...</span>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                <div className="w-1 h-1 bg-outlook-blue rounded-full opacity-50"></div>
                 <span>Analyzing specifications...</span>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                <div className="w-1 h-1 bg-outlook-blue rounded-full opacity-50"></div>
                 <span>Processing attachments...</span>
               </div>
             </div>
@@ -274,40 +283,40 @@ export default function AgentContextPanel({ email, emails, onCompareQuotes }) {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="bg-green-50 border border-green-200 rounded-lg p-4"
+            className="bg-green-900/20 border border-green-500/30 rounded p-4"
           >
             <div className="flex items-center space-x-2 mb-3">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <h4 className="text-sm font-semibold text-green-900">Scanning Market...</h4>
+              <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
+              <h4 className="text-[13px] font-semibold text-green-400">Scanning Market...</h4>
             </div>
             <div className="mb-3">
-              <div className="w-full bg-green-200 rounded-full h-2">
+              <div className="w-full bg-green-900/40 rounded-full h-1">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: '100%' }}
                   transition={{ duration: 3, ease: 'easeInOut' }}
-                  className="bg-green-500 h-2 rounded-full"
+                  className="bg-green-500 h-full rounded-full"
                 />
               </div>
             </div>
             {suppliersFound.length > 0 ? (
-              <div className="space-y-2">
-                <p className="text-xs text-green-800 font-medium">Found {suppliersFound.length} suppliers:</p>
+              <div className="space-y-1.5">
+                <p className="text-[11px] text-green-300 font-medium">Found {suppliersFound.length} suppliers:</p>
                 {suppliersFound.map((supplier, index) => (
                   <motion.div
                     key={supplier.id || index}
-                    initial={{ opacity: 0, x: -10 }}
+                    initial={{ opacity: 0, x: -5 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.2 }}
-                    className="text-xs text-green-800 flex items-center space-x-2"
+                    transition={{ delay: index * 0.1 }}
+                    className="text-[11px] text-green-300/80 flex items-center space-x-2"
                   >
-                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                    <span className="w-1 h-1 bg-green-500 rounded-full opacity-50"></span>
                     <span>{supplier.name || supplier.email}</span>
                   </motion.div>
                 ))}
               </div>
             ) : (
-              <p className="text-xs text-green-800">Searching supplier database...</p>
+              <p className="text-[11px] text-green-300">Searching supplier database...</p>
             )}
           </motion.div>
         )}
@@ -318,23 +327,23 @@ export default function AgentContextPanel({ email, emails, onCompareQuotes }) {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="bg-yellow-50 border border-yellow-200 rounded-lg p-4"
+            className="bg-yellow-900/20 border border-yellow-500/30 rounded p-4"
           >
-            <h4 className="text-sm font-semibold text-yellow-900 mb-2">Draft RFQ Ready</h4>
-            <p className="text-xs text-yellow-800 mb-3">Review and approve the RFQ before sending to suppliers.</p>
+            <h4 className="text-[13px] font-semibold text-yellow-400 mb-2">Draft RFQ Ready</h4>
+            <p className="text-xs text-yellow-300/80 mb-3">Review and approve the RFQ before sending to suppliers.</p>
             <Button
               variant="primary"
               onClick={() => setShowDraftRFQ(true)}
-              className="w-full text-sm"
+              className="w-full text-[11px] font-bold uppercase tracking-wide"
             >
-              Review & Approve RFQ
+              Review Draft
             </Button>
           </motion.div>
         )}
 
         {/* Progress Tracker */}
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-4">Progress</h4>
+          <h4 className="text-[11px] font-semibold text-outlook-text-secondary uppercase tracking-wider mb-5 pb-2 border-b border-outlook-border/30">Intelligence Progress</h4>
           <div className="space-y-0">
             {progressSteps.map((step, index) => {
               const isLast = index === progressSteps.length - 1
@@ -342,35 +351,39 @@ export default function AgentContextPanel({ email, emails, onCompareQuotes }) {
               
               return (
                 <div key={step.id} className="flex items-start">
-                  <div className="flex flex-col items-center mr-3">
+                  <div className="flex flex-col items-center mr-4">
                     {step.completed ? (
-                      <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
-                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      <div className="w-4 h-4 rounded-full bg-green-500 flex items-center justify-center">
+                        <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                         </svg>
                       </div>
                     ) : step.pending ? (
-                      <div className="w-6 h-6 rounded-full bg-yellow-400 flex items-center justify-center">
-                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                      <div className="w-4 h-4 rounded-full bg-yellow-500 flex items-center justify-center">
+                        <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                         </svg>
                       </div>
                     ) : isCurrent ? (
-                      <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center animate-pulse">
-                        <div className="w-2 h-2 rounded-full bg-white"></div>
+                      <div className="w-4 h-4 rounded-full bg-outlook-blue flex items-center justify-center">
+                        <motion.div 
+                          animate={{ scale: [1, 1.2, 1] }}
+                          transition={{ repeat: Infinity, duration: 2 }}
+                          className="w-1 h-1 rounded-full bg-white" 
+                        />
                       </div>
                     ) : (
-                      <div className="w-6 h-6 rounded-full border-2 border-gray-300"></div>
+                      <div className="w-4 h-4 rounded-full border border-outlook-border bg-black/20"></div>
                     )}
                     {!isLast && (
-                      <div className={`w-0.5 h-8 mt-1 ${step.completed ? 'bg-green-500' : step.pending ? 'bg-yellow-400' : 'bg-gray-300'}`}></div>
+                      <div className={`w-px h-7 mt-1 ${step.completed ? 'bg-green-500/50' : 'bg-outlook-border'}`}></div>
                     )}
                   </div>
-                  <div className="flex-1 pb-6">
-                    <p className={`text-sm ${step.completed ? 'text-gray-900' : step.pending ? 'text-yellow-700 font-medium' : isCurrent ? 'text-blue-600 font-medium' : 'text-gray-500'}`}>
+                  <div className="flex-1 pb-4">
+                    <p className={`text-[12px] font-medium ${step.completed ? 'text-outlook-text-tertiary line-through' : step.pending ? 'text-yellow-500' : isCurrent ? 'text-white font-semibold' : 'text-outlook-text-secondary'}`}>
                       {step.label}
-                      {step.count !== undefined && (
-                        <span className="text-gray-500 ml-1">
+                      {step.count !== undefined && step.count > 0 && (
+                        <span className="text-outlook-text-tertiary ml-1.5 font-normal">
                           ({step.count}{step.total ? `/${step.total}` : ''})
                         </span>
                       )}
@@ -384,21 +397,20 @@ export default function AgentContextPanel({ email, emails, onCompareQuotes }) {
 
         {/* Quick Actions */}
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-3">Quick Actions</h4>
+          <h4 className="text-[11px] font-semibold text-outlook-text-secondary uppercase tracking-wider mb-4 pb-2 border-b border-outlook-border/30">Tactical Actions</h4>
           <div className="space-y-2">
             {hasClarification && (
               <Button
                 variant="primary"
                 onClick={() => {
-                  // Scroll to clarification interface (it's already in ReadingPane)
                   const clarificationEl = document.querySelector('[data-clarification-interface]')
                   if (clarificationEl) {
                     clarificationEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
                   }
                 }}
-                className="w-full text-sm"
+                className="w-full text-[11px] font-bold py-2 uppercase tracking-wide"
               >
-                Answer Questions
+                Answer Queries
               </Button>
             )}
             {hasQuotes && (
@@ -414,7 +426,7 @@ export default function AgentContextPanel({ email, emails, onCompareQuotes }) {
                     onCompareQuotes()
                   }
                 }}
-                className="w-full text-sm"
+                className="w-full text-[11px] font-bold py-2 uppercase tracking-wide"
               >
                 Compare Quotes
               </Button>
@@ -422,14 +434,14 @@ export default function AgentContextPanel({ email, emails, onCompareQuotes }) {
             <Button
               variant="secondary"
               onClick={() => setShowSuppliers(true)}
-              className="w-full text-sm"
+              className="w-full text-[11px] font-semibold py-2 uppercase tracking-wide"
             >
-              View All Suppliers
+              Supplier Directory
             </Button>
             <Button
               variant="secondary"
               onClick={() => setShowRequirements(true)}
-              className="w-full text-sm"
+              className="w-full text-[11px] font-semibold py-2 uppercase tracking-wide"
             >
               View Requirements
             </Button>

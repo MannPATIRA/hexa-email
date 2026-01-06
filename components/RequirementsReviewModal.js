@@ -103,48 +103,48 @@ export default function RequirementsReviewModal({ email, parsedRequirements, onA
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.95, opacity: 0 }}
         onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col"
+        className="bg-outlook-sidebar rounded-lg shadow-2xl border border-outlook-border max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col"
       >
-        <div className="p-6 border-b border-gray-200 flex items-center justify-between bg-blue-50">
+        <div className="p-6 border-b border-outlook-border flex items-center justify-between bg-black">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Review Parsed Requirements</h2>
-            <p className="text-sm text-gray-500 mt-1">Please review the extracted requirements from the email</p>
+            <h2 className="text-xl font-semibold text-white">Review Requirements</h2>
+            <p className="text-sm text-outlook-text-secondary mt-1">Verify technical parameters before proceeding</p>
           </div>
-          <Button variant="ghost" onClick={onClose}>
+          <Button variant="ghost" onClick={onClose} className="text-white opacity-50 hover:opacity-100 transition-opacity">
             ✕
           </Button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6">
-          <div className="space-y-6">
+        <div className="flex-1 overflow-y-auto p-8 bg-outlook-bg scrollbar-custom">
+          <div className="space-y-8">
             {/* Part Information */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Part Information</h3>
-              <div className="grid grid-cols-2 gap-4">
+              <h3 className="text-xs font-bold text-outlook-blue uppercase tracking-wider mb-4">Identification</h3>
+              <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <label className="text-sm font-medium text-gray-500">Part Name</label>
+                  <label className="text-[10px] font-semibold text-outlook-text-tertiary uppercase tracking-wider block mb-1">Part Name</label>
                   {isEditing ? (
                     <input
                       type="text"
                       value={displayRequirements.partName || ''}
                       onChange={(e) => handleFieldChange('partName', e.target.value)}
-                      className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 bg-outlook-sidebar border border-outlook-border text-white text-sm rounded focus:ring-1 focus:ring-outlook-blue outline-none transition-all"
                     />
                   ) : (
-                    <p className="text-base text-gray-900 mt-1">{displayRequirements.partName || 'N/A'}</p>
+                    <p className="text-base text-white font-semibold">{displayRequirements.partName || 'N/A'}</p>
                   )}
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-500">Part Number</label>
+                  <label className="text-[10px] font-semibold text-outlook-text-tertiary uppercase tracking-wider block mb-1">Part Number</label>
                   {isEditing ? (
                     <input
                       type="text"
                       value={displayRequirements.partNumber || ''}
                       onChange={(e) => handleFieldChange('partNumber', e.target.value)}
-                      className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 bg-outlook-sidebar border border-outlook-border text-white text-sm rounded focus:ring-1 focus:ring-outlook-blue outline-none transition-all"
                     />
                   ) : (
-                    <p className="text-base text-gray-900 mt-1">{displayRequirements.partNumber || 'N/A'}</p>
+                    <p className="text-base text-white">{displayRequirements.partNumber || 'N/A'}</p>
                   )}
                 </div>
               </div>
@@ -152,32 +152,32 @@ export default function RequirementsReviewModal({ email, parsedRequirements, onA
 
             {/* Quantity & Volume */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Quantity</h3>
-              <div className="grid grid-cols-2 gap-4">
+              <h3 className="text-xs font-bold text-outlook-blue uppercase tracking-wider mb-4">Volume Parameters</h3>
+              <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <label className="text-sm font-medium text-gray-500">Initial Quantity</label>
+                  <label className="text-[10px] font-semibold text-outlook-text-tertiary uppercase tracking-wider block mb-1">Initial Quantity</label>
                   {isEditing ? (
                     <input
                       type="number"
                       value={displayRequirements.quantity || ''}
                       onChange={(e) => handleFieldChange('quantity', e.target.value)}
-                      className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 bg-outlook-sidebar border border-outlook-border text-white text-sm rounded focus:ring-1 focus:ring-outlook-blue outline-none transition-all"
                     />
                   ) : (
-                    <p className="text-base text-gray-900 mt-1">{displayRequirements.quantity || 'N/A'} units</p>
+                    <p className="text-base text-white font-semibold">{displayRequirements.quantity || 'N/A'} units</p>
                   )}
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-500">Annual Volume</label>
+                  <label className="text-[10px] font-semibold text-outlook-text-tertiary uppercase tracking-wider block mb-1">Annual Forecast</label>
                   {isEditing ? (
                     <input
                       type="number"
                       value={displayRequirements.annualVolume || ''}
                       onChange={(e) => handleFieldChange('annualVolume', e.target.value)}
-                      className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 bg-outlook-sidebar border border-outlook-border text-white text-sm rounded focus:ring-1 focus:ring-outlook-blue outline-none transition-all"
                     />
                   ) : (
-                    <p className="text-base text-gray-900 mt-1">{displayRequirements.annualVolume || 'N/A'} units/year</p>
+                    <p className="text-base text-white font-semibold">{displayRequirements.annualVolume || 'N/A'} units/year</p>
                   )}
                 </div>
               </div>
@@ -185,51 +185,51 @@ export default function RequirementsReviewModal({ email, parsedRequirements, onA
 
             {/* Material & Delivery */}
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Specifications</h3>
-              <div className="grid grid-cols-2 gap-4">
+              <h3 className="text-xs font-bold text-outlook-blue uppercase tracking-wider mb-4">Technical Specs</h3>
+              <div className="grid grid-cols-2 gap-6">
                 <div>
-                  <label className="text-sm font-medium text-gray-500">Material</label>
+                  <label className="text-[10px] font-semibold text-outlook-text-tertiary uppercase tracking-wider block mb-1">Material</label>
                   {isEditing ? (
                     <input
                       type="text"
                       value={displayRequirements.material || ''}
                       onChange={(e) => handleFieldChange('material', e.target.value)}
-                      className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 bg-outlook-sidebar border border-outlook-border text-white text-sm rounded focus:ring-1 focus:ring-outlook-blue outline-none transition-all"
                     />
                   ) : (
-                    <p className="text-base text-gray-900 mt-1">{displayRequirements.material || 'N/A'}</p>
+                    <p className="text-base text-white">{displayRequirements.material || 'N/A'}</p>
                   )}
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-500">Delivery Date</label>
+                  <label className="text-[10px] font-semibold text-outlook-text-tertiary uppercase tracking-wider block mb-1">Delivery Date</label>
                   {isEditing ? (
                     <input
                       type="text"
                       value={displayRequirements.deliveryDate || ''}
                       onChange={(e) => handleFieldChange('deliveryDate', e.target.value)}
-                      className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2 bg-outlook-sidebar border border-outlook-border text-white text-sm rounded focus:ring-1 focus:ring-outlook-blue outline-none transition-all"
                     />
                   ) : (
-                    <p className="text-base text-gray-900 mt-1">{displayRequirements.deliveryDate || 'N/A'}</p>
+                    <p className="text-base text-white">{displayRequirements.deliveryDate || 'N/A'}</p>
                   )}
                 </div>
               </div>
             </div>
 
             {/* Special Requirements */}
-            {displayRequirements.specialRequirements && (
+            {(displayRequirements.specialRequirements || isEditing) && (
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Special Requirements</h3>
+                <h3 className="text-xs font-bold text-outlook-blue uppercase tracking-wider mb-4">Special Instructions</h3>
                 {isEditing ? (
                   <textarea
                     value={displayRequirements.specialRequirements || ''}
                     onChange={(e) => handleFieldChange('specialRequirements', e.target.value)}
-                    className="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    rows={3}
+                    className="w-full px-3 py-2 bg-outlook-sidebar border border-outlook-border text-white text-sm rounded focus:ring-1 focus:ring-outlook-blue outline-none transition-all min-h-[100px]"
+                    placeholder="Enter any special constraints..."
                   />
                 ) : (
-                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                    <p className="text-base text-gray-900">{displayRequirements.specialRequirements}</p>
+                  <div className="bg-yellow-900/10 border border-yellow-500/20 rounded-md p-5">
+                    <p className="text-sm text-outlook-text-secondary leading-relaxed italic">"{displayRequirements.specialRequirements}"</p>
                   </div>
                 )}
               </div>
@@ -238,83 +238,45 @@ export default function RequirementsReviewModal({ email, parsedRequirements, onA
             {/* Compliance */}
             {displayRequirements.itarRequired && (
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Compliance</h3>
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <div className="flex items-center space-x-2">
+                <h3 className="text-xs font-bold text-outlook-blue uppercase tracking-wider mb-4">Regulatory Compliance</h3>
+                <div className="bg-outlook-sidebar border border-outlook-border rounded-md p-5 flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="px-2 py-0.5 bg-outlook-blue/10 border border-outlook-blue/20 rounded">
+                      <span className="text-[10px] font-bold text-outlook-blue">ITAR</span>
+                    </div>
+                    <span className="text-sm text-outlook-text-secondary font-medium">Domestic restricted manufacturing</span>
+                  </div>
+                  {isEditing && (
                     <input
                       type="checkbox"
                       checked={displayRequirements.itarRequired}
                       onChange={(e) => handleFieldChange('itarRequired', e.target.checked)}
-                      disabled={!isEditing}
-                      className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+                      className="w-4 h-4 text-outlook-blue bg-black border-outlook-border rounded"
                     />
-                    <span className="text-blue-600 font-semibold">ITAR</span>
-                    <span className="text-sm text-gray-700">Domestic suppliers only (US-based manufacturing required)</span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Attachments */}
-            {displayRequirements.attachments && displayRequirements.attachments.length > 0 && (
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Attachments</h3>
-                <div className="space-y-2">
-                  {displayRequirements.attachments.map((attachment, index) => {
-                    const name = typeof attachment === 'string' ? attachment : attachment.name
-                    const type = typeof attachment === 'object' ? attachment.type : null
-                    return (
-                      <div key={index} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                        </svg>
-                        <div className="flex-1">
-                          <p className="text-sm font-medium text-gray-900">{name}</p>
-                          {type && <p className="text-xs text-gray-500">{type}</p>}
-                        </div>
-                      </div>
-                    )
-                  })}
+                  )}
                 </div>
               </div>
             )}
           </div>
         </div>
 
-        <div className="p-6 border-t border-gray-200 flex items-center justify-between bg-gray-50">
+        <div className="p-6 border-t border-outlook-border flex items-center justify-between bg-black">
           <div className="flex space-x-3">
-            {!isEditing && (
-              <Button
-                variant="secondary"
-                onClick={() => setIsEditing(true)}
-              >
-                Edit Requirements
+            {!isEditing ? (
+              <Button variant="secondary" onClick={() => setIsEditing(true)} className="text-sm font-semibold">
+                Edit Details
+              </Button>
+            ) : (
+              <Button variant="ghost" onClick={() => { setIsEditing(false); setEditedRequirements(requirements); }} className="text-sm font-semibold text-outlook-text-secondary">
+                Cancel
               </Button>
             )}
-            {isEditing && (
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  setIsEditing(false)
-                  setEditedRequirements(requirements)
-                }}
-              >
-                Cancel Edit
-              </Button>
-            )}
-            <Button
-              variant="ghost"
-              onClick={handleReject}
-              className="text-red-600 hover:text-red-700"
-            >
-              Reject
+            <Button variant="ghost" onClick={handleReject} className="text-sm font-semibold text-red-400 hover:text-red-300">
+              Reject RFQ
             </Button>
           </div>
-          <Button
-            variant="primary"
-            onClick={handleAccept}
-          >
-            {isEditing ? 'Save & Accept' : 'Accept Requirements'}
+          <Button variant="primary" onClick={handleAccept} className="text-sm font-semibold px-10 py-2.5">
+            {isEditing ? 'Save & Proceed' : 'Accept & Find Suppliers'}
           </Button>
         </div>
       </motion.div>

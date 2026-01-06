@@ -129,126 +129,104 @@ export default function AgentProcessing({ rfqId, partName, onComplete, onSkip })
   const isStepFuture = (index) => index > currentStepIndex
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50 p-8">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl p-8">
+    <div className="flex items-center justify-center min-h-screen bg-black p-8">
+      <div className="bg-outlook-sidebar rounded-lg shadow-2xl border border-outlook-border w-full max-w-3xl p-12">
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="text-6xl mb-4"></div>
-          <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-            Processing Your Request
+        <div className="text-center mb-10">
+          <div className="w-16 h-16 bg-outlook-blue/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-outlook-blue/20">
+            <svg className="w-8 h-8 text-outlook-blue animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-semibold text-white mb-2 tracking-tight">
+            Agent Intelligence Active
           </h2>
-          <p className="text-lg text-gray-600">{rfqId}</p>
+          <p className="text-base text-outlook-blue font-semibold tracking-wider">{rfqId}</p>
           {partName && (
-            <p className="text-sm text-gray-500 mt-1">{partName}</p>
+            <p className="text-xs text-outlook-text-secondary mt-2 font-medium uppercase tracking-wider opacity-60">{partName}</p>
           )}
         </div>
 
-        <div className="border-t border-b border-gray-200 py-6 my-6">
+        <div className="border-t border-b border-outlook-border py-8 my-8 bg-black/10 rounded-lg px-6">
           {/* Processing Steps */}
           <div className="space-y-6">
             {PROCESSING_STEPS.map((step, index) => {
               const isCompleted = isStepCompleted(step.id)
               const isCurrent = isStepCurrent(step.id)
               const isFuture = isStepFuture(index)
-              const stepSubItem = step.subItems?.[currentSubItemIndex]
-              const showTyping = isCurrent && stepSubItem && typedText
 
               return (
-                <div key={step.id} className="space-y-2">
+                <div key={step.id} className="space-y-3">
                   {/* Main Step */}
-                  <div className="flex items-start space-x-3">
-                    <div className="flex-shrink-0 mt-1">
+                  <div className="flex items-start space-x-4">
+                    <div className="flex-shrink-0 mt-0.5">
                       {isCompleted ? (
-                        <motion.div
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                          className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center"
-                        >
-                          <motion.svg
-                            initial={{ pathLength: 0 }}
-                            animate={{ pathLength: 1 }}
-                            transition={{ duration: 0.3, delay: 0.1 }}
-                            className="w-4 h-4 text-white"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
+                        <div className="w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">
+                          <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                          </motion.svg>
-                        </motion.div>
+                          </svg>
+                        </div>
                       ) : isCurrent ? (
                         <motion.div
-                          animate={{ scale: [1, 1.2, 1] }}
-                          transition={{ repeat: Infinity, duration: 1.5 }}
-                          className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center"
+                          animate={{ scale: [1, 1.1, 1], opacity: [1, 0.8, 1] }}
+                          transition={{ repeat: Infinity, duration: 2 }}
+                          className="w-5 h-5 rounded-full bg-outlook-blue flex items-center justify-center"
                         >
                           <div className="w-2 h-2 rounded-full bg-white"></div>
                         </motion.div>
                       ) : (
-                        <div className="w-6 h-6 rounded-full border-2 border-gray-300"></div>
+                        <div className="w-5 h-5 rounded-full border border-outlook-border bg-transparent"></div>
                       )}
                     </div>
                     <div className="flex-1">
-                      <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className={`text-sm ${
-                          isCompleted ? 'text-gray-600' :
-                          isCurrent ? 'text-blue-600 font-medium' :
-                          'text-gray-400'
-                        }`}
-                      >
+                      <p className={`text-sm ${
+                        isCompleted ? 'text-outlook-text-secondary line-through opacity-50' :
+                        isCurrent ? 'text-white font-semibold' :
+                        'text-outlook-text-tertiary'
+                      }`}>
                         {step.label}
-                      </motion.p>
+                      </p>
 
                       {/* Progress Bar for Search Step */}
                       {isCurrent && step.showProgress && (
-                        <div className="mt-3">
-                          <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                        <div className="mt-4 max-w-md">
+                          <div className="w-full bg-outlook-bg rounded-full h-1 overflow-hidden border border-white/5">
                             <motion.div
                               initial={{ width: 0 }}
                               animate={{ width: `${progress}%` }}
                               transition={{ duration: 0.3, ease: 'easeOut' }}
-                              className="h-2 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 shadow-sm"
+                              className="h-full rounded-full bg-outlook-blue"
                             />
                           </div>
-                          <p className="text-xs text-gray-500 mt-1 number-transition">{Math.round(progress)}%</p>
+                          <div className="flex justify-between items-center mt-2">
+                            <p className="text-[10px] font-semibold text-outlook-blue uppercase tracking-wider">Analyzing Network</p>
+                            <p className="text-[10px] font-medium text-white">{Math.round(progress)}%</p>
+                          </div>
                         </div>
                       )}
 
                       {/* Sub-items */}
-                      {step.subItems && (
-                        <div className="mt-2 ml-4 space-y-1">
+                      {isCurrent && step.subItems && (
+                        <div className="mt-3 ml-1 space-y-1.5 border-l border-outlook-border/30 pl-3">
                           {step.subItems.map((subItem, subIndex) => {
-                            const isSubItemCurrent = isCurrent && subIndex === currentSubItemIndex
-                            const isSubItemCompleted = isCompleted || (isCurrent && subIndex < currentSubItemIndex)
+                            const isSubItemCurrent = subIndex === currentSubItemIndex
+                            const isSubItemCompleted = subIndex < currentSubItemIndex
                             const shouldShowTyping = isSubItemCurrent && typedText
 
-                            if (isSubItemCompleted && !shouldShowTyping) {
+                            if (isSubItemCompleted) {
                               return (
-                                <motion.p
-                                  key={subIndex}
-                                  initial={{ opacity: 0 }}
-                                  animate={{ opacity: 1 }}
-                                  className="text-xs text-gray-500"
-                                >
-                                  └─ {subItem}
-                                </motion.p>
+                                <p key={subIndex} className="text-[11px] text-outlook-text-secondary">
+                                  {subItem}
+                                </p>
                               )
                             }
 
                             if (shouldShowTyping) {
                               return (
-                                <motion.p
-                                  key={subIndex}
-                                  initial={{ opacity: 0 }}
-                                  animate={{ opacity: 1 }}
-                                  className="text-xs text-gray-500"
-                                >
-                                  └─ {typedText}
-                                  <span className="animate-pulse">|</span>
-                                </motion.p>
+                                <p key={subIndex} className="text-[11px] text-outlook-blue font-medium">
+                                  {typedText}
+                                  <span className="w-1 h-3 bg-outlook-blue inline-block ml-1 animate-pulse align-middle"></span>
+                                </p>
                               )
                             }
 
@@ -265,11 +243,13 @@ export default function AgentProcessing({ rfqId, partName, onComplete, onSkip })
         </div>
 
         {/* Info Message */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-          <div className="flex items-start space-x-2">
-            <span className="text-blue-600">Info</span>
-            <p className="text-sm text-gray-700">
-              This typically takes 2-3 minutes. You'll be notified when suppliers are identified and RFQs are ready to send.
+        <div className="bg-outlook-blue/5 border border-outlook-blue/10 rounded-md p-4 mb-8">
+          <div className="flex items-start space-x-3">
+            <svg className="w-4 h-4 text-outlook-blue mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p className="text-[11px] text-outlook-text-secondary leading-relaxed">
+              Hexa Agent is autonomously analyzing supplier capabilities and market pricing. You will be notified immediately upon completion.
             </p>
           </div>
         </div>
@@ -279,26 +259,23 @@ export default function AgentProcessing({ rfqId, partName, onComplete, onSkip })
           <Button
             variant="ghost"
             onClick={onSkip}
-            className="text-sm text-gray-600"
+            className="text-[11px] font-semibold text-outlook-text-secondary hover:text-white uppercase tracking-wide"
           >
-            Skip to Results
+            Bypass Sequence
           </Button>
           {isComplete ? (
             <Button
               variant="primary"
               onClick={onComplete}
-              className="text-sm"
+              className="text-[11px] font-bold px-8 py-2 uppercase tracking-wide"
             >
-              Review Suppliers & Send RFQs →
+              Continue
             </Button>
           ) : (
-            <Button
-              variant="primary"
-              disabled
-              className="text-sm"
-            >
-              Continue Working - I'll Notify You
-            </Button>
+            <div className="flex items-center space-x-3 px-5 py-2 rounded-md bg-white/5 border border-white/10">
+              <div className="w-1.5 h-1.5 bg-outlook-blue rounded-full animate-ping"></div>
+              <span className="text-[10px] font-bold text-white uppercase tracking-wider">Agent Computing</span>
+            </div>
           )}
         </div>
       </div>

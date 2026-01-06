@@ -105,14 +105,14 @@ export default function ResizablePane({
         ref={resizeHandleRef}
         onMouseDown={handleMouseDown}
         className={`absolute top-0 right-0 w-2 h-full cursor-col-resize group ${
-          isResizing ? 'bg-blue-500' : 'hover:bg-blue-200'
+          isResizing ? 'bg-outlook-blue' : 'hover:bg-outlook-blue-light'
         } transition-colors z-20`}
         style={{ 
           marginRight: '-4px',
           touchAction: 'none'
         }}
       >
-        <div className={`absolute top-1/2 right-1/2 transform translate-x-1/2 -translate-y-1/2 w-0.5 h-16 bg-gray-500 rounded-full ${
+        <div className={`absolute top-1/2 right-1/2 transform translate-x-1/2 -translate-y-1/2 w-0.5 h-16 bg-outlook-text-tertiary rounded-full ${
           isResizing ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
         } transition-opacity pointer-events-none`} />
       </div>

@@ -14,9 +14,9 @@ export default function ReadingPane({ email, onDelete, onArchive, onMarkRead, em
   
   if (!email) {
     return (
-      <div className="flex items-center justify-center h-full text-gray-500 bg-gray-50">
+      <div className="flex items-center justify-center h-full text-outlook-text-secondary bg-outlook-sidebar">
         <div className="text-center">
-          <p className="text-lg">Select an email to read</p>
+          <p className="text-sm">Select an email to read</p>
         </div>
       </div>
     )
@@ -44,166 +44,51 @@ export default function ReadingPane({ email, onDelete, onArchive, onMarkRead, em
   const canSendToAgent = isEngineeringEmail && !email.isAgentEmail && !email.rfqId && onSendToAgent
 
   return (
-    <div className="h-full flex overflow-hidden bg-white">
+    <div className="h-full flex overflow-hidden bg-outlook-sidebar">
       <div className={`h-full overflow-y-auto scrollbar-custom ${isAgentEmail ? 'flex-1' : 'w-full'}`}>
-      {/* Thread View - Show all emails in thread */}
-      {hasThread && (
-        <div className="border-b border-gray-200 bg-gray-50">
-          <div className="px-4 py-2 border-b border-gray-200">
-            <h3 className="text-sm font-semibold text-gray-700">Thread ({threadEmails.length} messages)</h3>
-          </div>
-          <div className="max-h-48 overflow-y-auto">
-            {threadEmails.map((threadEmail, index) => {
-              const isSelected = threadEmail.id === displayEmail.id
-              const threadSenderName = getSenderName(threadEmail.from)
-              return (
-                <button
-                  key={threadEmail.id}
-                  onClick={() => {
-                    setViewingThreadEmail(threadEmail)
-                    if (onEmailSelect) {
-                      onEmailSelect(threadEmail)
-                    }
-                  }}
-                  className={`w-full text-left px-4 py-3 border-b border-gray-200 hover:bg-gray-100 transition-colors ${
-                    isSelected ? 'bg-blue-50 border-l-4 border-l-blue-500' : ''
-                  }`}
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-semibold">
-                      {getInitials(threadSenderName)}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center space-x-2">
-                        <p className={`text-sm font-medium ${isSelected ? 'text-blue-900' : 'text-gray-900'}`}>
-                          {threadSenderName}
-                        </p>
-                        <span className="text-xs text-gray-500">
-                          {formatFullDate(threadEmail.date)}
-                        </span>
-                        {threadEmail.isQuote && (
-                          <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">Quote</span>
-                        )}
-                        {threadEmail.needsClarification && (
-                          <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded">Clarification</span>
-                        )}
-                      </div>
-                      <p className={`text-sm mt-1 truncate ${isSelected ? 'text-blue-800' : 'text-gray-600'}`}>
-                        {threadEmail.subject}
-                      </p>
-                    </div>
-                  </div>
-                </button>
-              )
-            })}
-          </div>
-        </div>
-      )}
       
-      <div className="p-6 border-b border-gray-200">
-        <div className="mb-4">
-          <div className="flex items-start justify-between gap-4 mb-3">
-            <h1 className="text-2xl font-semibold text-gray-900 flex-1 min-w-0 pr-4">{displayEmail.subject}</h1>
-            <div className="flex items-center gap-2 flex-shrink-0">
-              {canSendToAgent && (
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    if (onSendToAgent) {
-                      onSendToAgent(email)
-                    }
-                  }}
-                  className="px-6 py-2.5 font-semibold text-base shadow-sm hover:shadow-md transition-shadow"
-                >
-                  Hexa
-                </Button>
-              )}
+      <div className="p-5">
+        <div className="mb-6">
+          <div className="flex items-start justify-between gap-4 mb-4">
+            <h1 className="text-xl font-semibold text-white flex-1 min-w-0">{displayEmail.subject}</h1>
+            <div className="flex items-center space-x-2 text-outlook-text-secondary">
+              <button className="p-1.5 hover:bg-outlook-hover rounded transition-colors">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+              </button>
+              <button className="p-1.5 hover:bg-outlook-hover rounded transition-colors">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h10a8 8 0 018 8v2M3 10l5 5m-5-5l5-5" /></svg>
+              </button>
+              <button className="p-1.5 hover:bg-outlook-hover rounded transition-colors">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 19H6.931A1.922 1.922 0 015 17.087V8h12.069C18.135 8 19 8.857 19 9.913V11" /></svg>
+              </button>
             </div>
           </div>
-          <div className="flex items-center gap-2 flex-wrap">
-            {onMarkRead && (
-              <Button
-                variant="ghost"
-                onClick={() => onMarkRead(displayEmail.id)}
-                className="text-sm px-3 py-1.5"
-              >
-                {displayEmail.read ? 'Mark Unread' : 'Mark Read'}
-              </Button>
-            )}
-            {onArchive && (
-              <Button
-                variant="ghost"
-                onClick={() => onArchive(displayEmail.id)}
-                className="text-sm px-3 py-1.5"
-              >
-                Archive
-              </Button>
-            )}
-            {onDelete && (
-              <Button
-                variant="ghost"
-                onClick={() => onDelete(displayEmail.id)}
-                className="text-sm px-3 py-1.5 text-red-600 hover:text-red-700 hover:bg-red-50"
-              >
-                Delete
-              </Button>
-            )}
-          </div>
-        </div>
-        <div className="flex items-center space-x-3">
-          <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold">
-            {initials}
-          </div>
-              <div className="flex-1">
-                <div className="flex items-center space-x-2">
-                  <p className="font-semibold text-gray-900">{senderName}</p>
-                  <p className="text-sm text-gray-500">&lt;{email.from}&gt;</p>
-                  {/* Show supplier name for sent RFQ emails */}
-                  {displayEmail.isAgentEmail && displayEmail.rfqStatus === 'sent' && displayEmail.supplierName && !displayEmail.isQuote && !displayEmail.needsClarification && (
-                    <span className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded">
-                      To: {displayEmail.supplierName}
-                    </span>
-                  )}
+
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 rounded-full bg-outlook-blue flex items-center justify-center text-white text-sm font-semibold flex-shrink-0">
+              {initials}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 truncate pr-4">
+                  <span className="font-semibold text-sm text-white truncate">{senderName}</span>
+                  <span className="text-xs text-outlook-text-secondary truncate">&lt;{displayEmail.from}&gt;</span>
                 </div>
-                <p className="text-sm text-gray-500 mt-1">
-                  {displayEmail.isAgentEmail && displayEmail.rfqStatus === 'sent' && displayEmail.supplierEmail ? (
-                    <>To: {displayEmail.supplierEmail} • {formatFullDate(displayEmail.date)}</>
-                  ) : (
-                    <>To: {displayEmail.to} • {formatFullDate(displayEmail.date)}</>
-                  )}
-                </p>
+                <span className="text-xs text-outlook-text-secondary flex-shrink-0">{formatFullDate(displayEmail.date)}</span>
               </div>
-        </div>
-        {displayEmail.attachments && displayEmail.attachments.length > 0 && (
-          <div className="mt-4 pt-4 border-t border-gray-200">
-            <p className="text-sm font-medium text-gray-700 mb-2">Attachments:</p>
-            <div className="flex flex-wrap gap-2">
-              {displayEmail.attachments.map((attachment, index) => {
-                const attachmentName = typeof attachment === 'string' ? attachment : attachment.name
-                const attachmentType = typeof attachment === 'object' ? attachment.type : null
-                return (
-                  <div
-                    key={index}
-                    className="flex items-center space-x-2 px-3 py-2 bg-gray-100 rounded-md"
-                  >
-                    <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.414a2 2 0 000-2.828l-6.414-6.414a2 2 0 10-2.828 2.828L15.172 7z" />
-                    </svg>
-                    <span className="text-sm text-gray-700">{attachmentName}</span>
-                    {attachmentType && (
-                      <span className="text-xs text-gray-500">({attachmentType})</span>
-                    )}
-                  </div>
-                )
-              })}
+              <div className="text-xs text-outlook-text-secondary mt-0.5">
+                To: {displayEmail.to}
+              </div>
             </div>
           </div>
-        )}
-      </div>
-      <div className="p-6">
-        <div className="prose max-w-none">
-          <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">{displayEmail.body}</p>
         </div>
+
+        <div className="mt-2">
+          <div className="prose prose-invert max-w-none">
+            <p className="text-sm text-white whitespace-pre-wrap leading-relaxed">{displayEmail.body}</p>
+          </div>
+        </div>
+
         <ClarificationInterface
           email={displayEmail}
           onSubmit={(answers) => {
@@ -213,7 +98,6 @@ export default function ReadingPane({ email, onDelete, onArchive, onMarkRead, em
           }}
           onForward={(answers) => {
             console.log('Forward to Sarah Chen:', answers)
-            // TODO: Forward to Sarah Chen
           }}
         />
       </div>
@@ -224,4 +108,3 @@ export default function ReadingPane({ email, onDelete, onArchive, onMarkRead, em
     </div>
   )
 }
-
