@@ -15,7 +15,7 @@ import RFQDraftModal from './RFQDraftModal'
 import SimulateRepliesButton from './SimulateRepliesButton'
 import emailsData from '../data/emails.json'
 import foldersData from '../data/folders.json'
-import { filterEmailsByFolder, filterEmailsBySearch, extractPartNameFromEmail, getPartNameFromRfq, getThreadId } from '../lib/emailUtils'
+import { filterEmailsByFolder, filterEmailsBySearch, extractPartNameFromEmail, getPartNameFromRfq, getThreadId, normalizePartNameForId, getPartFolders } from '../lib/emailUtils'
 import { useDemoState, STAGES } from '../lib/demoState'
 import { suppliers, emailTemplates } from '../lib/demoData'
 
@@ -82,13 +82,8 @@ export default function Layout({ children, emails: propEmails }) {
       const partName = email.partName || getPartNameFromRfq(emails, email.rfqId) || extractPartNameFromEmail(email)
       
       if (partName) {
-        // Normalize part name to match folder ID format (same as getPartFolders)
-        const normalizedPartName = partName
-          .toLowerCase()
-          .replace(/[^a-zA-Z0-9\s-]/g, '')
-          .replace(/\s+/g, '-')
-          .replace(/-+/g, '-')
-          .replace(/^-|-$/g, '')
+        // Normalize part name to match folder ID format
+        const normalizedPartName = normalizePartNameForId(partName)
         const baseId = `agent-part-${normalizedPartName}`
         
         // Determine subfolder based on email properties (priority order matters)
@@ -104,10 +99,12 @@ export default function Layout({ children, emails: propEmails }) {
         else if (email.rfqStatus === 'sent' && (email.threadIndex === 0 || email.threadIndex === undefined) && !email.needsClarification && !email.isQuote) {
           return `${baseId}-sent`
         }
-        // Check for awaiting responses (our responses, forwards, or threads with responses)
-        else if (email.rfqStatus === 'sent' || email.threadIndex === 2 || email.needsEngineerReview) {
+        // Check for our responses or threads where we've responded
+        else if (email.threadIndex === 2 || email.needsEngineerReview === true) {
           return `${baseId}-awaiting`
         }
+        
+        return baseId
       }
     }
     
@@ -151,78 +148,11 @@ export default function Layout({ children, emails: propEmails }) {
       return
     }
     
-    // Don't clear selected email or redirect if we're setting folder from URL (programmatic)
-    // Only do this check if it's a user-initiated folder change (not from URL loading)
-    const isFromUrlLoad = router.query.id && initialFolderSet && folderId === getFolderForEmail(selectedEmail)
-    
     setCurrentFolder(folderId)
-    // Don't clear selected email when switching folders - keep it visible if it matches the new folder
-    // Only clear if the selected email doesn't belong to the current folder context
-    if (selectedEmail && !isFromUrlLoad) {
-      let emailMatchesFolder = false
-      
-      // Check if folder is a part-based folder
-      if (folderId.startsWith('agent-part-')) {
-        const parts = folderId.split('-')
-        if (parts.length >= 4) {
-          const partNameParts = parts.slice(2, -1)
-          const partName = partNameParts.join(' ').replace(/-/g, ' ')
-          const subfolder = parts[parts.length - 1]
-          
-          // Check if email belongs to this part
-          const emailPartName = selectedEmail.partName || extractPartNameFromEmail(selectedEmail)
-          if (emailPartName) {
-            const normalizedEmailPart = emailPartName.toLowerCase().replace(/\s+/g, ' ')
-            const normalizedTargetPart = partName.toLowerCase().replace(/\s+/g, ' ')
-            
-            if (normalizedEmailPart === normalizedTargetPart) {
-              // Check subfolder match
-              switch (subfolder) {
-                case 'sent':
-                  // Must be original RFQ (threadIndex === 0 or undefined)
-                  const isOriginal = selectedEmail.threadIndex === 0 || selectedEmail.threadIndex === undefined
-                  emailMatchesFolder = selectedEmail.isAgentEmail && 
-                                       selectedEmail.rfqStatus === 'sent' && 
-                                       isOriginal &&
-                                       !selectedEmail.needsClarification && 
-                                       !selectedEmail.isQuote
-                  break
-                case 'awaiting':
-                  // Can be original RFQ with no responses, or our response (threadIndex === 2), or forward (needsEngineerReview)
-                  emailMatchesFolder = selectedEmail.isAgentEmail && 
-                                       (selectedEmail.rfqStatus === 'sent' || 
-                                        selectedEmail.threadIndex === 2 || 
-                                        selectedEmail.needsEngineerReview === true)
-                  break
-                case 'clarifications':
-                  emailMatchesFolder = selectedEmail.needsClarification === true && selectedEmail.threadIndex === 1
-                  break
-                case 'quotes':
-                  emailMatchesFolder = selectedEmail.isQuote === true && selectedEmail.threadIndex === 1
-                  break
-              }
-            }
-          }
-        }
-      } else {
-        // Legacy folder matching
-        emailMatchesFolder = 
-          folderId === 'agent-active' ? (selectedEmail.isAgentEmail && selectedEmail.rfqStatus && selectedEmail.rfqStatus !== 'complete') :
-          folderId === 'agent-queue' ? selectedEmail.needsClarification === true :
-          folderId === 'agent-complete' ? selectedEmail.rfqStatus === 'complete' :
-          selectedEmail.folder === folderId
-      }
-      
-      if (!emailMatchesFolder) {
-        setSelectedEmail(null)
-        // Clear email from URL when switching to a folder that doesn't contain the selected email
-        // But only if it's a user-initiated change, not from URL loading
-        if (router.pathname.startsWith('/email/') && !isFromUrlLoad) {
-          router.push('/flow')
-        }
-      }
-    }
     setSearchQuery('')
+    
+    // Optional: Clear selected email if you want the reading pane to reset when switching major sections
+    // but for now let's keep it for a smoother experience as the user requested "fixing the bugginess"
   }
 
   const handleEmailSelect = (email) => {

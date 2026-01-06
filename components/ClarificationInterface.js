@@ -206,10 +206,8 @@ ProcureFlow Agent`,
   }
 
   return (
-    <motion.div
+    <div
       data-clarification-interface
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
       className="mt-6 border-t border-outlook-border pt-6"
     >
       {/* Header */}
@@ -272,7 +270,7 @@ ProcureFlow Agent`,
                         name={`question-${question.id}`}
                         checked={answer?.type === 'suggestion'}
                         onChange={() => handleAnswerChange(question.id, 'suggestion')}
-                        className="sr-only"
+                        className="hidden"
                       />
                       <div className={`w-4 h-4 rounded-full border transition-all flex items-center justify-center ${
                         answer?.type === 'suggestion' ? 'bg-outlook-blue border-outlook-blue' : 'bg-black border-outlook-border'
@@ -294,7 +292,7 @@ ProcureFlow Agent`,
                       name={`question-${question.id}`}
                       checked={answer?.type === 'custom'}
                       onChange={() => handleAnswerChange(question.id, 'custom')}
-                      className="sr-only"
+                      className="hidden"
                     />
                     <div className={`w-4 h-4 rounded-full border transition-all flex items-center justify-center ${
                       answer?.type === 'custom' ? 'bg-outlook-blue border-outlook-blue' : 'bg-black border-outlook-border'
@@ -324,11 +322,7 @@ ProcureFlow Agent`,
 
       {/* Submit Section */}
       <div className="border-t border-outlook-border pt-6 mt-8">
-        <div className="flex items-center justify-between">
-          <div className="min-w-0 flex-1 mr-6">
-            <p className="text-xs font-semibold text-outlook-text-tertiary uppercase tracking-wider">Reciprocal Contact</p>
-            <p className="text-sm font-semibold text-white truncate">{supplierName}</p>
-          </div>
+        <div className="flex items-center justify-end">
           <div className="flex space-x-3 flex-shrink-0">
             <Button
               variant="secondary"
@@ -356,7 +350,7 @@ ProcureFlow Agent`,
           </div>
         )}
       </div>
-    </motion.div>
+    </div>
   )
 }
 

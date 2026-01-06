@@ -13,7 +13,7 @@ const sizing = {
   chevronSize: 10,
   chevronColumnWidth: 16, // Fixed width for chevron area
   leftPadding: 8,
-  nestedIndent: 14,
+  nestedIndent: 8,
   countColumnWidth: 44, // Fixed width for count alignment
   railWidth: 52,
   folderWidth: 248,
@@ -166,7 +166,7 @@ export default function Sidebar({ folders, emails, currentFolder, onFolderSelect
   const foldersWithParts = useMemo(() => {
     return folders.map(folder => {
       if (folder.id === 'agent') {
-        return { ...folder, children: partFolders }
+        return { ...folder, children: partFolders, isExpandable: partFolders.length > 0 }
       }
       return folder
     })
