@@ -13,7 +13,7 @@ export default function Header({ onSearch, selectedEmail, onSendToAgent }) {
     <div className="flex flex-col">
       {/* Top Search Rail - darker background */}
       <div className="h-12 flex items-center px-4 justify-between" style={{ background: '#141414' }}>
-        {/* Left side - 9-dots and hamburger */}
+        {/* Left side - 9-dots */}
         <div className="flex items-center" style={{ gap: '4px' }}>
           {/* 9-dots app launcher */}
           <button className="p-2 hover:bg-outlook-hover rounded transition-colors text-white">
@@ -28,10 +28,6 @@ export default function Header({ onSearch, selectedEmail, onSendToAgent }) {
               <circle cx="12" cy="19" r="2" />
               <circle cx="19" cy="19" r="2" />
             </svg>
-          </button>
-          {/* Hamburger menu */}
-          <button className="p-2 hover:bg-outlook-hover rounded transition-colors text-white">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
           </button>
         </div>
         
@@ -54,6 +50,11 @@ export default function Header({ onSearch, selectedEmail, onSendToAgent }) {
       {/* Primary Toolbar - uses chrome background */}
       <div className="h-12 flex items-center px-4 justify-between bg-outlook-chrome">
         <div className="flex items-center" style={{ gap: '10px' }}>
+          {/* Hamburger menu */}
+          <button className="p-2 hover:bg-outlook-hover rounded transition-colors text-white mr-1">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+          </button>
+          
           <button className="bg-outlook-blue hover:bg-outlook-blue-hover text-white px-4 py-1.5 rounded flex items-center space-x-2 text-sm font-semibold transition-colors shadow-sm">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
             <span>New Email</span>
