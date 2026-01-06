@@ -3,7 +3,6 @@ import { formatFullDate, getInitials, getSenderName, getThreadEmails, getEmailTh
 import Button from './Button'
 import AgentContextPanel from './AgentContextPanel'
 import ClarificationInterface from './ClarificationInterface'
-import { Sun, ClipboardList, Sparkles, Smile, Reply, ReplyAll, Forward } from 'lucide-react'
 
 export default function ReadingPane({ email, onDelete, onArchive, onMarkRead, emails = [], onCompareQuotes, onSendToAgent, onClarificationSubmit, onEmailSelect }) {
   const [viewingThreadEmail, setViewingThreadEmail] = useState(null)
@@ -55,36 +54,36 @@ export default function ReadingPane({ email, onDelete, onArchive, onMarkRead, em
             <div className="flex items-center space-x-1 text-outlook-text-secondary">
               {/* Brightness toggle */}
               <button className="p-1.5 hover:bg-outlook-hover rounded transition-colors leading-none">
-                <Sun size={18} strokeWidth={1.5} className="block" />
+                <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
               </button>
               
               {/* Summarise button with label */}
               <button className="flex items-center space-x-1.5 px-2 py-1 hover:bg-outlook-hover rounded transition-colors leading-none">
                 <div className="relative inline-block">
-                  <ClipboardList size={18} strokeWidth={1.5} className="block" />
-                  <Sparkles size={8} strokeWidth={1.5} className="absolute -top-0.5 -right-0.5 block" />
+                  <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01m-.01 4h.01" /></svg>
+                  <svg className="w-2 h-2 absolute -top-0.5 -right-0.5 text-outlook-blue" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
                 </div>
                 <span className="text-sm font-semibold text-white">Summarise</span>
               </button>
               
               {/* Emoji reaction */}
               <button className="p-1.5 hover:bg-outlook-hover rounded transition-colors leading-none">
-                <Smile size={18} strokeWidth={1.5} className="block" />
+                <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               </button>
               
               {/* Reply */}
               <button className="p-1.5 hover:bg-outlook-hover rounded transition-colors leading-none">
-                <Reply size={18} strokeWidth={1.5} className="block" />
+                <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" /></svg>
               </button>
               
               {/* Reply All */}
               <button className="p-1.5 hover:bg-outlook-hover rounded transition-colors leading-none">
-                <ReplyAll size={18} strokeWidth={1.5} className="block" />
+                <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" /></svg>
               </button>
               
               {/* Forward */}
               <button className="p-1.5 hover:bg-outlook-hover rounded transition-colors leading-none">
-                <Forward size={18} strokeWidth={1.5} className="block" />
+                <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 5l7 7-7 7M5 5l7 7-7 7" /></svg>
               </button>
             </div>
           </div>

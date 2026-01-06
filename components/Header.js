@@ -83,10 +83,10 @@ export default function Header({ onSearch, selectedEmail, onSendToAgent }) {
         </div>
 
         <div className="flex items-center space-x-2">
-          <button className="flex items-center space-x-2 px-3 py-1.5 hover:bg-outlook-hover rounded transition-colors text-white">
-            <div className="w-4 h-4 bg-gradient-to-tr from-blue-400 via-purple-500 to-red-400 rounded-full"></div>
-            <span className="text-xs font-semibold">Copilot</span>
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+          <button className="flex items-center px-3 py-1.5 hover:bg-outlook-hover rounded transition-colors text-white flex items-center">
+            <img src="/copilot-logo.png" alt="Copilot" className="w-8 h-8 object-contain translate-x-[5px]" />
+            <span className="text-xs font-semibold ml-2.5">Copilot</span>
+            <svg className="w-3 h-3 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
           </button>
         </div>
       </div>
