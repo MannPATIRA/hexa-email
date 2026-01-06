@@ -1,13 +1,19 @@
 import SearchBar from './SearchBar'
+import { motion, AnimatePresence } from 'framer-motion'
 
-export default function Header({ onSearch, selectedEmail, onSendToAgent }) {
-  const canSendToAgent = selectedEmail && 
-                         !selectedEmail.isAgentEmail && 
-                         !selectedEmail.rfqId && 
-                         (selectedEmail.from?.includes('sarah.chen') || 
-                          selectedEmail.from?.includes('engineering') ||
-                          selectedEmail.subject?.toLowerCase().includes('rfq request')) &&
-                         onSendToAgent;
+export default function Header({ onSearch, selectedEmail, onSendToAgent, isProcessing }) {
+  const isEngineeringEmail = selectedEmail && (
+    selectedEmail.from?.includes('sarah.chen') || 
+    selectedEmail.from?.includes('engineering') ||
+    selectedEmail.subject?.toLowerCase().includes('rfq request')
+  );
+
+  const isAgentActive = selectedEmail && (selectedEmail.isAgentEmail || selectedEmail.rfqId);
+  
+  const canSendToAgent = isEngineeringEmail && !isAgentActive && onSendToAgent;
+
+  // Show button if it can be sent, if it's already an agent email, or if it's currently processing
+  const showHexaButton = canSendToAgent || isAgentActive || isProcessing;
 
   return (
     <div className="flex flex-col">
@@ -33,7 +39,7 @@ export default function Header({ onSearch, selectedEmail, onSendToAgent }) {
         
         <div className="flex-1 max-w-2xl px-4 flex justify-center">
           <div className="w-full max-w-xl">
-            <SearchBar onSearch={onSearch} />
+        <SearchBar onSearch={onSearch} />
           </div>
         </div>
 
@@ -69,16 +75,54 @@ export default function Header({ onSearch, selectedEmail, onSendToAgent }) {
             <ToolbarButton icon={<svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>} label="Sync" />
             <ToolbarButton icon={<svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>} label="Block" />
             
-            {canSendToAgent && (
-              <button 
-                onClick={() => onSendToAgent(selectedEmail)}
-                className="flex items-center space-x-2 px-3 py-1.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 rounded transition-all shadow-lg group"
+            {showHexaButton && (
+              <motion.button 
+                initial={{ opacity: 0, scale: 0.9, x: -10 }}
+                animate={{ 
+                  opacity: 1, 
+                  scale: 1, 
+                  x: 0,
+                  boxShadow: (isProcessing || isAgentActive)
+                    ? ["0 0 0px rgba(34, 197, 94, 0)", "0 0 20px rgba(34, 197, 94, 0.3)", "0 0 0px rgba(34, 197, 94, 0)"]
+                    : "0 4px 6px -1px rgba(0, 0, 0, 0.1)"
+                }}
+                transition={{ 
+                  boxShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" },
+                  opacity: { duration: 0.2 }
+                }}
+                onClick={() => canSendToAgent && onSendToAgent(selectedEmail)}
+                className={`flex items-center space-x-2.5 pl-2 pr-3 py-1.5 rounded transition-all relative overflow-hidden group ${
+                  (isProcessing || isAgentActive)
+                    ? 'bg-[#064e3b] cursor-default' 
+                    : 'bg-[#065f46] hover:bg-[#047857] shadow-lg active:scale-95'
+                }`}
               >
-                <svg className="w-4 h-4 text-white animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                <span className="text-xs font-bold text-white tracking-wide">HEXA</span>
-              </button>
+                {/* Processing gradient overlay */}
+                {(isProcessing || isAgentActive) && (
+                  <motion.div 
+                    initial={{ x: '-100%' }}
+                    animate={{ x: '100%' }}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent pointer-events-none"
+                  />
+                )}
+                
+                <div className="relative flex items-center space-x-2 z-10">
+                  <motion.img 
+                    src="/hexa-logo.png" 
+                    alt="Hexa" 
+                    className="w-4 h-4 object-contain brightness-0 invert"
+                    animate={isProcessing ? { 
+                      rotate: [0, 10, -10, 10, 0],
+                      scale: [1, 1.1, 1],
+                    } : {}}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  />
+                  <span className="text-[11px] font-bold text-white tracking-[0.05em] uppercase">
+                    HEXA
+                  </span>
+                </div>
+              </motion.button>
             )}
           </div>
         </div>
@@ -88,7 +132,7 @@ export default function Header({ onSearch, selectedEmail, onSendToAgent }) {
             <img src="/copilot-logo.png" alt="Copilot" className="w-8 h-8 object-contain translate-x-[5px]" />
             <span className="text-xs font-semibold ml-2.5">Copilot</span>
             <svg className="w-3 h-3 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-          </button>
+        </button>
         </div>
       </div>
     </div>

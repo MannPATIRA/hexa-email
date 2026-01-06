@@ -49,9 +49,9 @@ export default function ReadingPane({ email, onDelete, onArchive, onMarkRead, em
       
       <div style={{ padding: '20px 28px 28px 28px' }}>
         <div className="mb-6">
-          <div className="flex items-start justify-between gap-4 mb-4">
-            <h1 className="text-xl font-semibold text-white flex-1 min-w-0">{displayEmail.subject}</h1>
-            <div className="flex items-center space-x-1 text-outlook-text-secondary">
+          <div className="flex flex-col gap-3 mb-4">
+            {/* Actions Toolbar - Right aligned */}
+            <div className="flex items-center justify-end space-x-1 text-outlook-text-secondary">
               {/* Brightness toggle */}
               <button className="p-1.5 hover:bg-outlook-hover rounded transition-colors leading-none">
                 <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
@@ -86,6 +86,9 @@ export default function ReadingPane({ email, onDelete, onArchive, onMarkRead, em
                 <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 5l7 7-7 7M5 5l7 7-7 7" /></svg>
               </button>
             </div>
+
+            {/* Subject - Full Width */}
+            <h1 className="text-xl font-semibold text-white leading-tight min-w-0">{displayEmail.subject}</h1>
           </div>
 
           <div className="flex items-center space-x-3">

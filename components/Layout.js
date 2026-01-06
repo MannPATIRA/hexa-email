@@ -447,6 +447,7 @@ export default function Layout({ children, emails: propEmails }) {
       <Header 
         onSearch={handleSearch} 
         selectedEmail={selectedEmail}
+        isProcessing={showAgentProcessing}
         onSendToAgent={demoState ? (email) => {
           const rfqId = email.rfqId || `RFQ-2024-${String(Date.now()).slice(-4)}`
           const agentEmail = { ...email, isAgentEmail: true, rfqId, folder: 'inbox' }
