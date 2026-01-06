@@ -7,19 +7,22 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // Outlook dark theme - based on #272727 chrome
+        'outlook-chrome': '#272727', // Main app chrome background
+        'outlook-surface': '#1e1e1e', // Surface panel background (message list, reading pane)
         'outlook-blue': '#0078D4',
         'outlook-blue-hover': '#106EBE',
         'outlook-blue-light': '#2B2B2B',
         'outlook-blue-lighter': '#333333',
         'agent-indigo': '#6366F1',
-        'outlook-bg': '#1F1F1F',
-        'outlook-bg-alt': '#212121',
-        'outlook-sidebar': '#212121',
-        'outlook-rail': '#292929',
-        'outlook-border': '#333333',
-        'outlook-border-dark': '#3D3D3D',
-        'outlook-hover': '#2B2B2B',
-        'outlook-selected': '#333333',
+        'outlook-bg': '#272727', // Updated from #1F1F1F
+        'outlook-bg-alt': '#2b2b2b', // Updated from #212121
+        'outlook-sidebar': '#272727', // Updated to match chrome
+        'outlook-rail': '#272727', // Updated to match chrome
+        'outlook-border': '#3a3a3a', // Slightly lighter for visibility
+        'outlook-border-dark': '#333333',
+        'outlook-hover': '#333333',
+        'outlook-selected': '#383838',
         'outlook-text': '#FFFFFF',
         'outlook-text-secondary': '#A19F9D',
         'outlook-text-tertiary': '#8A8886',

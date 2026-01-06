@@ -25,10 +25,11 @@ function AppWithDemoState({ Component, pageProps }) {
 }
 
 export default function App({ Component, pageProps }) {
-  // Only wrap with DemoStateProvider if not the flow page (it has its own)
+  // Only wrap with DemoStateProvider if not the flow page or email page (they have their own)
   const isFlowPage = Component.name === 'Flow'
+  const isEmailPage = Component.name === 'EmailDetail'
   
-  if (isFlowPage) {
+  if (isFlowPage || isEmailPage) {
     return <Component {...pageProps} />
   }
 

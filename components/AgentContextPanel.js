@@ -193,7 +193,7 @@ export default function AgentContextPanel({ email, emails, onCompareQuotes }) {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 20 }}
       transition={{ duration: 0.3, ease: 'easeOut' }}
-      className="w-80 bg-outlook-sidebar border-l border-outlook-border h-full overflow-y-auto scrollbar-custom"
+      className="w-80 bg-outlook-surface border-l border-white/5 h-full overflow-y-auto scrollbar-custom"
     >
       <div className="p-6 space-y-6">
         {/* Header Section */}

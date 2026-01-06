@@ -2,18 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
+/* CSS Variables for Outlook dark theme - based on #272727 chrome */
+:root {
+  /* Background tokens */
+  --bg-chrome: #272727;    /* Main app chrome background */
+  --bg-surface: #1e1e1e;   /* Surface panel background (message list, reading pane) */
+  --divider: rgba(255, 255, 255, 0.04);
+  --radius-panel: 12px;    /* Panel corner radius */
+  
+  /* Legacy panel vars (for scrollbar etc) */
+  --panel-bg: #1e1e1e;
+  --panel-bg-alt: #1e1e1e;
+  
+  /* Scrollbar */
+  --sb-size: 10px;
+  --sb-thumb: rgba(180, 180, 180, 0.35);
+  --sb-thumb-hover: rgba(180, 180, 180, 0.55);
+  --sb-thumb-active: rgba(180, 180, 180, 0.7);
+  --sb-track: transparent;
+}
+
 /* Outlook exact styling */
 @layer base {
   * {
     @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-outlook-blue focus-visible:ring-offset-1;
   }
 
+  html, body {
+    background-color: var(--bg-chrome);
+    color: #ffffff;
+  }
+
   body {
     @apply antialiased;
     font-family: 'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, 'Roboto', 'Helvetica Neue', sans-serif;
     font-size: 14px;
-    background-color: #F3F2F1;
-    color: #323130;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -23,9 +46,142 @@
   code, .mono {
     font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
   }
+
+  /* GLOBAL SVG FIX: Ensure strokes are never clipped */
+  svg {
+    overflow: visible !important;
+  }
 }
 
 @layer components {
+  /* ===== MAIN LAYOUT - Full height flex structure ===== */
+  .main-row {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    gap: 6px;
+    padding: 6px 6px 0 0;
+  }
+
+  /* ===== COLUMN WRAPPERS - Full height, allow children to fill ===== */
+  .sidebar-column-wrap {
+    flex: 0 0 auto;
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    position: relative;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  .message-list-wrap {
+    flex: 0 0 auto;
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    position: relative;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  .reading-pane-wrap {
+    flex: 1 1 auto;
+    height: 100%;
+    min-height: 0;
+    min-width: 0;
+    display: flex;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  /* ===== PANE SURFACE - Rounded boxed panels, full height ===== */
+  .pane-surface {
+    flex: 1 1 auto;
+    min-height: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-surface);
+    border-radius: 14px;
+    overflow: hidden;
+    /* Reset any inherited borders/shadows */
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Fixed header inside pane */
+  .pane-header {
+    flex: 0 0 auto;
+  }
+
+  /* Scrollable body inside pane */
+  .pane-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+  }
+
+  /* ===== RESET unwanted borders on other layout elements ===== */
+  .folder-nav-column {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  /* ===== NO DIVIDER LINES - Outlook uses spacing and background contrast only ===== */
+  /* Explicitly remove any pseudo-element dividers */
+  .sidebar-column-wrap::after,
+  .sidebar-column-wrap::before,
+  .message-list-wrap::after,
+  .message-list-wrap::before,
+  .reading-pane-wrap::after,
+  .reading-pane-wrap::before,
+  .folder-nav-column::after,
+  .folder-nav-column::before {
+    content: none !important;
+    display: none !important;
+  }
+
+  /* Remove any borders on column wrappers */
+  .sidebar-column-wrap,
+  .message-list-wrap,
+  .reading-pane-wrap,
+  .folder-nav-column {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Remove all internal borders within panes */
+  .pane-surface,
+  .pane-surface *,
+  .pane-header,
+  .pane-body,
+  .pane-body * {
+    border-left: none !important;
+    border-right: none !important;
+  }
+
+  /* Keep only intentional UI borders like the Focused tab underline */
+  .pane-header button {
+    border-left: none !important;
+    border-right: none !important;
+    border-top: none !important;
+    /* Allow border-bottom for tab underlines */
+  }
+
+  /* Remove horizontal line under toolbar */
+  .main-row {
+    border-top: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    background-image: none !important;
+  }
+
   /* Card styles */
   .card {
     @apply bg-white rounded-lg shadow-sm border border-gray-200;
@@ -80,30 +236,10 @@
     display: none;
   }
 
-  /* Custom scrollbar - Outlook style */
-  .scrollbar-custom::-webkit-scrollbar {
-    width: 12px;
-    height: 12px;
-  }
-
-  .scrollbar-custom::-webkit-scrollbar-track {
-    background-color: #F3F2F1;
-  }
-
-  .scrollbar-custom::-webkit-scrollbar-thumb {
-    background-color: #C8C6C4;
-    border-radius: 6px;
-    border: 2px solid #F3F2F1;
-  }
-
-  .scrollbar-custom::-webkit-scrollbar-thumb:hover {
-    background-color: #A19F9D;
-  }
-
   /* Text selection - Outlook style */
   ::selection {
-    background-color: #C8E6F5;
-    color: #0078D4;
+    background-color: #264F78;
+    color: #ffffff;
   }
 
   /* Smooth number transitions */
@@ -112,3 +248,124 @@
   }
 }
 
+/* ============================================
+   SCROLLBAR STYLES - Dark Outlook Theme
+   ============================================ */
+
+/* Scroll area class for consistent dark scrollbars */
+.scrollArea {
+  background: var(--panel-bg-alt);
+  scrollbar-width: thin;
+  scrollbar-color: var(--sb-thumb) transparent;
+}
+
+.scrollArea::-webkit-scrollbar {
+  width: var(--sb-size);
+  height: var(--sb-size);
+}
+
+.scrollArea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollArea::-webkit-scrollbar-thumb {
+  background-color: var(--sb-thumb);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.scrollArea::-webkit-scrollbar-thumb:hover {
+  background-color: var(--sb-thumb-hover);
+}
+
+.scrollArea::-webkit-scrollbar-thumb:active {
+  background-color: var(--sb-thumb-active);
+}
+
+.scrollArea::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Legacy class - redirect to same dark styling */
+.scrollbar-custom {
+  scrollbar-width: thin;
+  scrollbar-color: var(--sb-thumb) transparent;
+}
+
+.scrollbar-custom::-webkit-scrollbar {
+  width: var(--sb-size);
+  height: var(--sb-size);
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background-color: var(--sb-thumb);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:hover {
+  background-color: var(--sb-thumb-hover);
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:active {
+  background-color: var(--sb-thumb-active);
+}
+
+.scrollbar-custom::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ============================================
+   GLOBAL FALLBACK SCROLLBAR STYLES
+   Catches any scrollable element we missed
+   ============================================ */
+
+/* Use :where() for lowest specificity so component styles can override */
+:where(*) {
+  scrollbar-width: thin;
+  scrollbar-color: var(--sb-thumb) transparent;
+}
+
+:where(*)::-webkit-scrollbar {
+  width: var(--sb-size);
+  height: var(--sb-size);
+}
+
+:where(*)::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:where(*)::-webkit-scrollbar-thumb {
+  background-color: var(--sb-thumb);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+:where(*)::-webkit-scrollbar-thumb:hover {
+  background-color: var(--sb-thumb-hover);
+}
+
+:where(*)::-webkit-scrollbar-thumb:active {
+  background-color: var(--sb-thumb-active);
+}
+
+:where(*)::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* ============================================
+   SIDEBAR DIVIDER - Respects rounded corners
+   ============================================ */
+
+/* 
+ * Folder navigation column divider - intentionally removed
+ * The gap between panels provides visual separation
+ * No divider line needed, which avoids corner mismatch issues
+ */

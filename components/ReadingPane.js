@@ -3,6 +3,7 @@ import { formatFullDate, getInitials, getSenderName, getThreadEmails, getEmailTh
 import Button from './Button'
 import AgentContextPanel from './AgentContextPanel'
 import ClarificationInterface from './ClarificationInterface'
+import { Sun, ClipboardList, Sparkles, Smile, Reply, ReplyAll, Forward } from 'lucide-react'
 
 export default function ReadingPane({ email, onDelete, onArchive, onMarkRead, emails = [], onCompareQuotes, onSendToAgent, onClarificationSubmit, onEmailSelect }) {
   const [viewingThreadEmail, setViewingThreadEmail] = useState(null)
@@ -14,7 +15,7 @@ export default function ReadingPane({ email, onDelete, onArchive, onMarkRead, em
   
   if (!email) {
     return (
-      <div className="flex items-center justify-center h-full text-outlook-text-secondary bg-outlook-sidebar">
+      <div className="flex items-center justify-center h-full text-outlook-text-secondary" style={{ padding: '20px 28px' }}>
         <div className="text-center">
           <p className="text-sm">Select an email to read</p>
         </div>
@@ -44,22 +45,46 @@ export default function ReadingPane({ email, onDelete, onArchive, onMarkRead, em
   const canSendToAgent = isEngineeringEmail && !email.isAgentEmail && !email.rfqId && onSendToAgent
 
   return (
-    <div className="h-full flex overflow-hidden bg-outlook-sidebar">
+    <div className="h-full flex overflow-hidden">
       <div className={`h-full overflow-y-auto scrollbar-custom ${isAgentEmail ? 'flex-1' : 'w-full'}`}>
       
-      <div className="p-5">
+      <div style={{ padding: '20px 28px 28px 28px' }}>
         <div className="mb-6">
           <div className="flex items-start justify-between gap-4 mb-4">
             <h1 className="text-xl font-semibold text-white flex-1 min-w-0">{displayEmail.subject}</h1>
-            <div className="flex items-center space-x-2 text-outlook-text-secondary">
-              <button className="p-1.5 hover:bg-outlook-hover rounded transition-colors">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+            <div className="flex items-center space-x-1 text-outlook-text-secondary">
+              {/* Brightness toggle */}
+              <button className="p-1.5 hover:bg-outlook-hover rounded transition-colors leading-none">
+                <Sun size={18} strokeWidth={1.5} className="block" />
               </button>
-              <button className="p-1.5 hover:bg-outlook-hover rounded transition-colors">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 10h10a8 8 0 018 8v2M3 10l5 5m-5-5l5-5" /></svg>
+              
+              {/* Summarise button with label */}
+              <button className="flex items-center space-x-1.5 px-2 py-1 hover:bg-outlook-hover rounded transition-colors leading-none">
+                <div className="relative inline-block">
+                  <ClipboardList size={18} strokeWidth={1.5} className="block" />
+                  <Sparkles size={8} strokeWidth={1.5} className="absolute -top-0.5 -right-0.5 block" />
+                </div>
+                <span className="text-sm font-semibold text-white">Summarise</span>
               </button>
-              <button className="p-1.5 hover:bg-outlook-hover rounded transition-colors">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 19H6.931A1.922 1.922 0 015 17.087V8h12.069C18.135 8 19 8.857 19 9.913V11" /></svg>
+              
+              {/* Emoji reaction */}
+              <button className="p-1.5 hover:bg-outlook-hover rounded transition-colors leading-none">
+                <Smile size={18} strokeWidth={1.5} className="block" />
+              </button>
+              
+              {/* Reply */}
+              <button className="p-1.5 hover:bg-outlook-hover rounded transition-colors leading-none">
+                <Reply size={18} strokeWidth={1.5} className="block" />
+              </button>
+              
+              {/* Reply All */}
+              <button className="p-1.5 hover:bg-outlook-hover rounded transition-colors leading-none">
+                <ReplyAll size={18} strokeWidth={1.5} className="block" />
+              </button>
+              
+              {/* Forward */}
+              <button className="p-1.5 hover:bg-outlook-hover rounded transition-colors leading-none">
+                <Forward size={18} strokeWidth={1.5} className="block" />
               </button>
             </div>
           </div>

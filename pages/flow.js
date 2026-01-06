@@ -30,6 +30,9 @@ function FlowContent() {
 
   // Auto-select Sarah Chen's email on mount - ensure it's not an agent email
   useEffect(() => {
+    // Only run this on the flow page, not when navigating to email pages
+    if (router.pathname !== '/flow') return
+    
     if (emails.length > 0 && !selectedEmail) {
       // Find Sarah Chen's email (first email from sarah.chen that's not already an agent email)
       let sarahEmail = emails.find(e => 
@@ -53,9 +56,9 @@ function FlowContent() {
         setSelectedEmail(sarahEmail)
       }
       
-      // Also update URL
-      if (sarahEmail && typeof window !== 'undefined' && router) {
-        router.replace(`/email/${sarahEmail.id}`, undefined, { shallow: true })
+      // Also update URL - use push instead of replace with shallow for cross-page navigation
+      if (sarahEmail && typeof window !== 'undefined' && router && router.isReady) {
+        router.push(`/email/${sarahEmail.id}`)
       }
     }
   }, [emails, selectedEmail, setSelectedEmail, router])

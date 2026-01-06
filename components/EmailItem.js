@@ -62,6 +62,9 @@ function getAvatarColor(name) {
   return colors[Math.abs(hash) % colors.length]
 }
 
+// Outlook blue accent for unread indicator
+const accentBlue = '#4aa3ff'
+
 export default function EmailItem({ email, isSelected, onClick }) {
   const senderName = getSenderName(email.from)
   const initials = getInitials(senderName)
@@ -70,13 +73,7 @@ export default function EmailItem({ email, isSelected, onClick }) {
   const attachmentCount = hasAttachments ? email.attachments.length : 0
   const needsClarification = email.needsClarification === true
   const statusBadge = getStatusBadge(email)
-
-  // Determine border color based on clarification status
-  const borderClass = needsClarification
-    ? 'border-l-4 border-l-yellow-400'
-    : isSelected
-    ? 'border-l-4 border-l-outlook-blue'
-    : ''
+  const isUnread = !email.read
 
   return (
     <div
@@ -85,41 +82,83 @@ export default function EmailItem({ email, isSelected, onClick }) {
         e.stopPropagation()
         onClick()
       }}
-      className={`px-4 py-2 cursor-pointer transition-colors duration-150 ${
+      className={`cursor-pointer transition-colors duration-150 ${
         isSelected
           ? 'bg-outlook-selected'
           : 'hover:bg-outlook-hover'
-      } relative`}
+      }`}
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '16px 36px 1fr',
+        alignItems: 'center',
+        columnGap: '10px',
+        padding: '10px 12px',
+      }}
       role="button"
       tabIndex={0}
       aria-label={`Email from ${senderName}: ${email.subject}`}
     >
-      {!email.read && (
-        <div className="absolute left-0 top-0 bottom-0 w-1 bg-outlook-blue"></div>
-      )}
-      <div className="flex items-start space-x-3">
-        <div className="flex-shrink-0 mt-1">
-          <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${avatarColor} flex items-center justify-center text-white text-xs font-semibold`}>
-            {initials}
+      {/* Unread dot indicator */}
+      <div
+        style={{
+          width: '8px',
+          height: '8px',
+          borderRadius: '999px',
+          backgroundColor: accentBlue,
+          justifySelf: 'center',
+          opacity: isUnread ? 1 : 0,
+        }}
+      />
+
+      {/* Avatar */}
+      <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${avatarColor} flex items-center justify-center text-white text-xs font-semibold flex-shrink-0`}>
+        {initials}
+      </div>
+
+      {/* Content */}
+      <div className="min-w-0">
+        {/* Top line: sender display name + status badge + time */}
+        <div className="flex items-center justify-between mb-0.5">
+          <div className="flex items-center space-x-2 min-w-0">
+            <span 
+              className="truncate"
+              style={{
+                fontSize: '15px',
+                lineHeight: '1.3',
+                color: isUnread ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.75)',
+                fontWeight: isUnread ? 700 : 500,
+              }}
+            >
+              {senderName}
+            </span>
+            {statusBadge}
           </div>
+          <span 
+            className="text-[11px] whitespace-nowrap ml-2"
+            style={{ color: 'rgba(255,255,255,0.55)' }}
+          >
+            {formatDate(email.date)}
+          </span>
         </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between mb-0.5">
-            <div className="flex items-center space-x-2 min-w-0">
-              <span className={`text-sm truncate ${!email.read ? 'font-semibold text-white' : 'font-normal text-outlook-text-secondary'}`}>
-                {senderName}
-              </span>
-              {statusBadge}
-            </div>
-            <span className="text-[11px] text-outlook-text-secondary whitespace-nowrap ml-2">{formatDate(email.date)}</span>
-          </div>
-          <p className={`text-sm truncate leading-tight ${!email.read ? 'text-white font-medium' : 'text-outlook-text-secondary'}`}>
-            {email.subject}
-          </p>
-          <p className="text-xs text-outlook-text-tertiary truncate mt-0.5 leading-tight">
-            {email.body.substring(0, 60)}...
-          </p>
-        </div>
+
+        {/* Subject line */}
+        <p 
+          className="text-[13px] truncate leading-tight"
+          style={{
+            color: isUnread ? accentBlue : 'rgba(255,255,255,0.65)',
+            fontWeight: isUnread ? 600 : 400,
+          }}
+        >
+          {email.subject}
+        </p>
+
+        {/* Preview snippet */}
+        <p 
+          className="text-[12px] truncate mt-0.5 leading-tight"
+          style={{ color: 'rgba(255,255,255,0.45)' }}
+        >
+          {email.body.substring(0, 80)}...
+        </p>
       </div>
     </div>
   )

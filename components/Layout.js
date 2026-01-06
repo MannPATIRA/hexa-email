@@ -150,10 +150,15 @@ export default function Layout({ children, emails: propEmails }) {
       setIsComposeOpen(true)
       return
     }
+    
+    // Don't clear selected email or redirect if we're setting folder from URL (programmatic)
+    // Only do this check if it's a user-initiated folder change (not from URL loading)
+    const isFromUrlLoad = router.query.id && initialFolderSet && folderId === getFolderForEmail(selectedEmail)
+    
     setCurrentFolder(folderId)
     // Don't clear selected email when switching folders - keep it visible if it matches the new folder
     // Only clear if the selected email doesn't belong to the current folder context
-    if (selectedEmail) {
+    if (selectedEmail && !isFromUrlLoad) {
       let emailMatchesFolder = false
       
       // Check if folder is a part-based folder
@@ -211,8 +216,9 @@ export default function Layout({ children, emails: propEmails }) {
       if (!emailMatchesFolder) {
         setSelectedEmail(null)
         // Clear email from URL when switching to a folder that doesn't contain the selected email
-        if (router.pathname.startsWith('/email/')) {
-          router.replace('/inbox', undefined, { shallow: true })
+        // But only if it's a user-initiated change, not from URL loading
+        if (router.pathname.startsWith('/email/') && !isFromUrlLoad) {
+          router.push('/flow')
         }
       }
     }
@@ -223,8 +229,10 @@ export default function Layout({ children, emails: propEmails }) {
     // Set selected email immediately - DON'T change the folder
     // The folder should stay as the user selected it
     setSelectedEmail(email)
-    // Update URL when email is selected (use replace to avoid adding to history)
-    router.replace(`/email/${email.id}`, undefined, { shallow: true })
+    // Update URL when email is selected - use push for cross-page navigation
+    if (router.pathname !== `/email/${email.id}`) {
+      router.push(`/email/${email.id}`)
+    }
     // Mark as read when selected
     if (!email.read) {
       if (demoState?.setEmails) {
@@ -505,7 +513,7 @@ export default function Layout({ children, emails: propEmails }) {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-black text-white font-sans overflow-hidden">
+    <div className="h-screen flex flex-col bg-outlook-chrome text-white font-sans overflow-hidden">
       <Header 
         onSearch={handleSearch} 
         selectedEmail={selectedEmail}
@@ -526,88 +534,69 @@ export default function Layout({ children, emails: propEmails }) {
           }, 1000)
         } : undefined}
       />
-      <div className="flex-1 flex overflow-hidden p-1 gap-1">
-        {/* Far-left Navigation Rail */}
-        <div className="w-12 bg-black flex flex-col items-center py-2 space-y-4 flex-shrink-0">
-          <div className="p-2 bg-outlook-blue rounded-md mb-2">
-            <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-          </div>
-          <button className="text-outlook-text-secondary hover:text-white p-2 transition-colors">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-          </button>
-          <button className="text-outlook-text-secondary hover:text-white p-2 transition-colors">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197" /></svg>
-          </button>
-          <button className="text-outlook-text-secondary hover:text-white p-2 transition-colors">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-          </button>
-          <div className="flex-1"></div>
-          <button className="text-outlook-text-secondary hover:text-white p-2 mb-2 transition-colors">
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" /></svg>
-          </button>
+      <div className="main-row">
+        {/* Sidebar wrapper - flat on chrome */}
+        <div className="sidebar-column-wrap">
+          <Sidebar
+            folders={folders}
+            emails={emails}
+            currentFolder={currentFolder}
+            onFolderSelect={handleFolderSelect}
+          />
         </div>
 
-        {/* Folder Sidebar */}
-        <ResizablePane
-          defaultWidth={250}
-          minWidth={180}
-          maxWidth={400}
-          storageKey="procureflow-sidebar-width"
-        >
-          <div className="h-full bg-outlook-sidebar rounded-t-lg overflow-hidden border-r border-outlook-border">
-            <Sidebar
-              folders={folders}
-              emails={emails}
-              currentFolder={currentFolder}
-              onFolderSelect={handleFolderSelect}
-            />
-          </div>
-        </ResizablePane>
-
-        {/* Message List */}
-        <ResizablePane
-          defaultWidth={380}
-          minWidth={300}
-          maxWidth={600}
-          storageKey="procureflow-emaillist-width"
-        >
-          <div className="h-full bg-outlook-sidebar rounded-t-lg overflow-hidden border-r border-outlook-border flex flex-col">
-            <div className="px-4 py-2 flex items-center space-x-4 border-b border-outlook-border">
-              <button className="text-sm font-semibold text-outlook-blue border-b-2 border-outlook-blue pb-1">Focused</button>
-              <button className="text-sm font-semibold text-outlook-text-secondary hover:text-white pb-1 transition-colors">Other</button>
-              <div className="flex-1"></div>
-              <button className="text-outlook-text-secondary hover:text-white transition-colors">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" /></svg>
-              </button>
+        {/* Message List - rounded surface box, full height */}
+        <div className="message-list-wrap">
+          <ResizablePane
+            defaultWidth={380}
+            minWidth={300}
+            maxWidth={600}
+            storageKey="procureflow-emaillist-width"
+          >
+            <div className="pane-surface">
+              {/* Fixed header */}
+              <div className="pane-header px-4 py-2 flex items-center space-x-4">
+                <button className="text-sm font-semibold text-outlook-blue border-b-2 border-outlook-blue pb-1">Focused</button>
+                <button className="text-sm font-semibold text-outlook-text-secondary hover:text-white pb-1 transition-colors">Other</button>
+                <div className="flex-1"></div>
+                <button className="text-outlook-text-secondary hover:text-white transition-colors">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" /></svg>
+                </button>
+              </div>
+              {/* Scrollable body */}
+              <div className="pane-body">
+                <EmailList
+                  emails={filteredEmails}
+                  selectedEmailId={selectedEmail?.id}
+                  onEmailSelect={handleEmailSelect}
+                />
+              </div>
             </div>
-            <div className="flex-1 overflow-hidden">
-              <EmailList
-                emails={filteredEmails}
-                selectedEmailId={selectedEmail?.id}
+          </ResizablePane>
+        </div>
+
+        {/* Reading Pane - rounded surface box, full height */}
+        <div className="reading-pane-wrap">
+          <div className="pane-surface">
+            <div className="pane-body">
+              <ReadingPane
+                email={selectedEmail}
+                onDelete={handleDelete}
+                onArchive={handleArchive}
+                onMarkRead={handleMarkRead}
+                emails={emails}
                 onEmailSelect={handleEmailSelect}
+                onCompareQuotes={() => {
+                  if (selectedEmail?.rfqId) {
+                    setShowQuoteComparison(true)
+                  }
+                }}
+                onClarificationSubmit={(answers) => {
+                  console.log('Clarification answers submitted:', answers)
+                }}
               />
             </div>
           </div>
-        </ResizablePane>
-
-        {/* Reading Pane */}
-        <div className="flex-1 bg-outlook-sidebar rounded-t-lg overflow-hidden flex flex-col min-w-0">
-          <ReadingPane
-            email={selectedEmail}
-            onDelete={handleDelete}
-            onArchive={handleArchive}
-            onMarkRead={handleMarkRead}
-            emails={emails}
-            onEmailSelect={handleEmailSelect}
-            onCompareQuotes={() => {
-              if (selectedEmail?.rfqId) {
-                setShowQuoteComparison(true)
-              }
-            }}
-            onClarificationSubmit={(answers) => {
-              console.log('Clarification answers submitted:', answers)
-            }}
-          />
         </div>
       </div>
       <ComposeModal

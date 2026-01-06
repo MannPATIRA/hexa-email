@@ -23,7 +23,11 @@ export default function SearchBar({ onSearch, placeholder = 'Search mail...' }) 
         value={query}
         onChange={handleChange}
         placeholder={placeholder}
-        className="w-full pl-9 pr-4 py-1 bg-[#333333] border-none rounded text-sm text-white placeholder-outlook-text-secondary focus:outline-none focus:ring-1 focus:ring-outlook-blue transition-all"
+        className="w-full pl-9 pr-4 py-1.5 rounded text-sm text-white placeholder-outlook-text-secondary focus:outline-none focus:ring-1 focus:ring-outlook-blue transition-all"
+        style={{
+          background: '#2a2a2a',
+          border: '1px solid rgba(255,255,255,0.06)',
+        }}
         aria-label="Search mail"
       />
     </div>
