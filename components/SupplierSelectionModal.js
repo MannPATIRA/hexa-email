@@ -115,7 +115,7 @@ export default function SupplierSelectionModal({ foundSuppliers, onSelect, onClo
                                 <span key={i} className={i < Math.round(supplier.history.averageRating) ? "text-yellow-400" : "text-white/10"}>★</span>
                               ))}
                             </div>
-                          </div>
+                            </div>
                         </div>
                       )}
 

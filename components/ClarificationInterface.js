@@ -240,21 +240,21 @@ ProcureFlow Agent`,
                 </p>
                 {question.agentReasoning && (
                   <div className="bg-outlook-blue/5 border border-outlook-blue/20 rounded p-3 mt-3">
-                    <div className="flex-1">
+                      <div className="flex-1">
                       <p className="text-[10px] font-bold text-outlook-blue uppercase tracking-wider mb-1">Agent recommendation:</p>
-                      {hasSuggestion ? (
+                        {hasSuggestion ? (
                         <p className="text-sm text-white/90">{question.agentSuggestion}</p>
-                      ) : (
+                        ) : (
                         <p className="text-sm text-white/90">{question.agentReasoning}</p>
-                      )}
-                      {hasSuggestion && question.agentReasoning && (
+                        )}
+                        {hasSuggestion && question.agentReasoning && (
                         <p className="text-[11px] text-outlook-text-secondary mt-2 italic font-medium">"{question.agentReasoning}"</p>
-                      )}
-                      {question.confidence && (
+                        )}
+                        {question.confidence && (
                         <p className="text-[10px] font-bold text-outlook-blue/70 mt-2 uppercase tracking-tight">
                           Confidence Score: {question.confidence === 'high' ? 'High' : question.confidence === 'needs-human' ? 'Action Required' : 'Medium'}
-                        </p>
-                      )}
+                          </p>
+                        )}
                     </div>
                   </div>
                 )}

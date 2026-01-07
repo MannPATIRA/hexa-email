@@ -112,8 +112,8 @@ export default function EmailItem({ email, isSelected, onClick }) {
 
       {/* Avatar */}
       <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${avatarColor} flex items-center justify-center text-white text-xs font-semibold flex-shrink-0`}>
-        {initials}
-      </div>
+            {initials}
+          </div>
 
       {/* Content */}
       <div className="min-w-0">
@@ -129,9 +129,9 @@ export default function EmailItem({ email, isSelected, onClick }) {
                 fontWeight: isUnread ? 700 : 500,
               }}
             >
-              {senderName}
-            </span>
-            {statusBadge}
+                {senderName}
+              </span>
+              {statusBadge}
           </div>
           <span 
             className="text-[11px] whitespace-nowrap ml-2"

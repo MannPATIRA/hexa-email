@@ -543,11 +543,11 @@ export default function Sidebar({ folders, emails, currentFolder, onFolderSelect
           })}
 
           {/* Agent folder - spacing replaces divider */}
-          {agentFolder && (
+        {agentFolder && (
             <div style={{ marginTop: '8px' }}>
               {renderFolderRow(agentFolder, 0)}
             </div>
-          )}
+        )}
 
           {/* Saved Searches - spacing replaces divider */}
           <div style={{ marginTop: '12px' }}>

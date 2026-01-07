@@ -510,21 +510,21 @@ export default function Layout({ children, emails: propEmails }) {
         <div className="reading-pane-wrap">
           <div className="pane-surface">
             <div className="pane-body">
-              <ReadingPane
-                email={selectedEmail}
-                onDelete={handleDelete}
-                onArchive={handleArchive}
-                onMarkRead={handleMarkRead}
-                emails={emails}
-                onEmailSelect={handleEmailSelect}
-                onCompareQuotes={() => {
-                  if (selectedEmail?.rfqId) {
-                    setShowQuoteComparison(true)
-                  }
-                }}
-                onClarificationSubmit={(answers) => {
-                  console.log('Clarification answers submitted:', answers)
-                }}
+            <ReadingPane
+              email={selectedEmail}
+              onDelete={handleDelete}
+              onArchive={handleArchive}
+              onMarkRead={handleMarkRead}
+              emails={emails}
+              onEmailSelect={handleEmailSelect}
+              onCompareQuotes={() => {
+                if (selectedEmail?.rfqId) {
+                  setShowQuoteComparison(true)
+                }
+              }}
+              onClarificationSubmit={(answers) => {
+                console.log('Clarification answers submitted:', answers)
+              }}
               />
             </div>
           </div>

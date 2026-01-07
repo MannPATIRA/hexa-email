@@ -62,7 +62,7 @@ export default function ReadingPane({ email, onDelete, onArchive, onMarkRead, em
                 <div className="relative inline-block">
                   <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01m-.01 4h.01" /></svg>
                   <svg className="w-2 h-2 absolute -top-0.5 -right-0.5 text-outlook-blue" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
-                </div>
+          </div>
                 <span className="text-sm font-normal text-outlook-text-secondary">Summarise</span>
               </button>
               
@@ -79,7 +79,7 @@ export default function ReadingPane({ email, onDelete, onArchive, onMarkRead, em
               {/* Reply All */}
               <button className="p-1.5 hover:bg-outlook-hover rounded transition-colors leading-none">
                 <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" /></svg>
-              </button>
+                </button>
               
               {/* Forward */}
               <button className="p-1.5 hover:bg-outlook-hover rounded transition-colors leading-none">
@@ -91,10 +91,10 @@ export default function ReadingPane({ email, onDelete, onArchive, onMarkRead, em
             <h1 className="text-xl font-semibold text-white leading-tight min-w-0">{cleanSubject(displayEmail.subject)}</h1>
           </div>
 
-          <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-3">
             <div className="w-10 h-10 rounded-full bg-outlook-blue flex items-center justify-center text-white text-sm font-semibold flex-shrink-0">
-              {initials}
-            </div>
+            {initials}
+          </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2 truncate pr-4">
@@ -105,7 +105,7 @@ export default function ReadingPane({ email, onDelete, onArchive, onMarkRead, em
               </div>
               <div className="text-xs text-outlook-text-secondary mt-0.5">
                 To: {displayEmail.to}
-              </div>
+                  </div>
             </div>
           </div>
         </div>
@@ -113,7 +113,7 @@ export default function ReadingPane({ email, onDelete, onArchive, onMarkRead, em
         <div className="mt-2">
           <div className="prose prose-invert max-w-none">
             <p className="text-sm text-white whitespace-pre-wrap leading-relaxed">{displayEmail.body}</p>
-          </div>
+      </div>
         </div>
 
         <ClarificationInterface

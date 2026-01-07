@@ -98,7 +98,7 @@ export default function RFQDraftModal({ draftRFQ, suppliers: selectedSuppliers, 
                     <div key={supplier.id || supplier.email} className="px-3 py-1.5 bg-outlook-sidebar border border-outlook-border rounded-md flex items-center space-x-2">
                       <div className="w-1.5 h-1.5 rounded-full bg-outlook-blue"></div>
                       <span className="text-xs font-semibold text-white">{supplier.name || supplier.email}</span>
-                    </div>
+                        </div>
                   ))}
                 </div>
               </div>
@@ -113,35 +113,35 @@ export default function RFQDraftModal({ draftRFQ, suppliers: selectedSuppliers, 
                     <span className="text-xs font-semibold text-outlook-text-tertiary w-16 uppercase tracking-wider">To</span>
                     <p className="text-sm font-semibold text-outlook-blue truncate">
                       {selectedSuppliers?.map(s => s.email || s).join(', ')}
-                    </p>
-                  </div>
+                  </p>
+                </div>
                   <div className="flex items-center">
                     <span className="text-xs font-semibold text-outlook-text-tertiary w-16 uppercase tracking-wider">Subject</span>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={editedDraft?.subject || `RFQ-${draftRFQ.rfqId}: ${draftRFQ.partName}`}
-                        onChange={(e) => setEditedDraft({ ...editedDraft, subject: e.target.value })}
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={editedDraft?.subject || `RFQ-${draftRFQ.rfqId}: ${draftRFQ.partName}`}
+                      onChange={(e) => setEditedDraft({ ...editedDraft, subject: e.target.value })}
                         className="flex-1 px-3 py-1.5 bg-black border border-outlook-border text-white text-sm rounded outline-none focus:ring-1 focus:ring-outlook-blue transition-all"
-                      />
-                    ) : (
+                    />
+                  ) : (
                       <p className="text-sm font-semibold text-white">
-                        {draftRFQ.subject || `RFQ-${draftRFQ.rfqId}: ${draftRFQ.partName}`}
-                      </p>
-                    )}
-                  </div>
+                      {draftRFQ.subject || `RFQ-${draftRFQ.rfqId}: ${draftRFQ.partName}`}
+                    </p>
+                  )}
+                </div>
                   <div className="pt-4 border-t border-outlook-border/30">
-                    {isEditing ? (
-                      <textarea
+                  {isEditing ? (
+                    <textarea
                         value={editedDraft?.body || draftRFQ.body || ''}
-                        onChange={(e) => setEditedDraft({ ...editedDraft, body: e.target.value })}
+                      onChange={(e) => setEditedDraft({ ...editedDraft, body: e.target.value })}
                         className="w-full px-4 py-3 bg-black border border-outlook-border text-white text-sm rounded outline-none focus:ring-1 focus:ring-outlook-blue transition-all min-h-[300px]"
-                      />
-                    ) : (
+                    />
+                  ) : (
                       <div className="text-sm text-outlook-text-secondary whitespace-pre-wrap leading-relaxed">
                         {draftRFQ.body}
-                      </div>
-                    )}
+                    </div>
+                  )}
                   </div>
                 </div>
               </div>
