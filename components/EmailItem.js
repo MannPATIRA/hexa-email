@@ -1,4 +1,4 @@
-import { formatDate, getInitials, getSenderName } from '../lib/emailUtils'
+import { formatDate, getInitials, getSenderName, cleanSubject } from '../lib/emailUtils'
 
 function getStatusBadge(email) {
   if (!email.isAgentEmail) return null
@@ -149,7 +149,7 @@ export default function EmailItem({ email, isSelected, onClick }) {
             fontWeight: isUnread ? 600 : 400,
           }}
         >
-          {email.subject}
+          {cleanSubject(email.subject)}
         </p>
 
         {/* Preview snippet */}

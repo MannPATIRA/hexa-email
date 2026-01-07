@@ -120,42 +120,34 @@ const styles = {
     justifyContent: 'flex-end',
     alignItems: 'center',
     zIndex: 1,
-    marginRight: '4px', // Padding from row edge
+    marginRight: '12px', // Increased margin to move number away from the right edge
   },
-  // Base count badge styling
+  // Base count badge styling - plain text, no circular background
   count: {
     fontSize: '12px',
     fontWeight: 700,
     color: colors.accentBlue,
     lineHeight: 1,
-    minWidth: '20px',
-    height: '20px',
     display: 'inline-flex',
     alignItems: 'center',
-    justifyContent: 'center',
-    padding: '0 6px',
-    borderRadius: '10px',
+    padding: '0 4px',
     background: 'transparent',
   },
-  // Count badge when row is selected - subtle background for emphasis
+  // Count badge when row is selected - same plain style
   countSelected: {
     fontSize: '12px',
     fontWeight: 700,
     color: colors.accentBlue,
     lineHeight: 1,
-    minWidth: '20px',
-    height: '20px',
     display: 'inline-flex',
     alignItems: 'center',
-    justifyContent: 'center',
-    padding: '0 6px',
-    borderRadius: '10px',
-    background: 'rgba(74, 163, 255, 0.15)', // Subtle blue background
+    padding: '0 4px',
+    background: 'transparent',
   },
 }
 
 export default function Sidebar({ folders, emails, currentFolder, onFolderSelect }) {
-  const [expandedAccountIds, setExpandedAccountIds] = useState(['im322@ic.ac.uk'])
+  const [expandedAccountIds, setExpandedAccountIds] = useState(['procurement-team@company.com'])
   const [expandedFolders, setExpandedFolders] = useState(['agent'])
   const [favouritesExpanded, setFavouritesExpanded] = useState(true)
   const [savedSearchesExpanded, setSavedSearchesExpanded] = useState(false)
@@ -176,7 +168,7 @@ export default function Sidebar({ folders, emails, currentFolder, onFolderSelect
   const agentFolder = foldersWithParts.find(f => f.id === 'agent')
 
   const accounts = useMemo(() => [
-    { id: 'im322@ic.ac.uk', name: 'im322@ic.ac.uk', folders: regularFolders }
+    { id: 'procurement-team@company.com', name: 'procurement-team@company.com', folders: regularFolders }
   ], [regularFolders])
 
   const toggleAccount = (accountId) => {
@@ -451,12 +443,12 @@ export default function Sidebar({ folders, emails, currentFolder, onFolderSelect
       width: `${sizing.railWidth + sizing.folderWidth + 2}px`,
       backgroundColor: colors.chromeBg, // Continuous background for entire left area
     }}>
-      {/* Icon Rail - same background as folder column, flat */}
+      {/* Icon Rail - separate dark background */}
       <div 
         style={{ 
           width: `${sizing.railWidth}px`, 
           flexShrink: 0,
-          // No separate background - inherits from parent
+          backgroundColor: '#262626', // Specifically requested dark color for rail
         }}
         className="flex flex-col items-center py-2"
       >

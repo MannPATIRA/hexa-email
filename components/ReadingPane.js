@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { formatFullDate, getInitials, getSenderName, getThreadEmails, getEmailThreadId } from '../lib/emailUtils'
+import { formatFullDate, getInitials, getSenderName, getThreadEmails, getEmailThreadId, cleanSubject } from '../lib/emailUtils'
 import Button from './Button'
 import AgentContextPanel from './AgentContextPanel'
 import ClarificationInterface from './ClarificationInterface'
@@ -88,7 +88,7 @@ export default function ReadingPane({ email, onDelete, onArchive, onMarkRead, em
             </div>
 
             {/* Subject - Full Width */}
-            <h1 className="text-xl font-semibold text-white leading-tight min-w-0">{displayEmail.subject}</h1>
+            <h1 className="text-xl font-semibold text-white leading-tight min-w-0">{cleanSubject(displayEmail.subject)}</h1>
           </div>
 
           <div className="flex items-center space-x-3">
